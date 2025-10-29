@@ -7,7 +7,7 @@ export default function CookiesPage() {
         <div className="mx-auto max-w-5xl px-4">
           <h1 className="text-3xl font-bold">Politica de cookies</h1>
           <p className="mt-2 text-sm text-blue-200">
-            TramitesYA.com - Como usamos cookies y tecnologias similares
+            TramitesYA - Como usamos cookies y tecnologias similares
           </p>
         </div>
       </header>
@@ -95,7 +95,7 @@ export default function CookiesPage() {
 
       <footer className="border-t border-slate-200 bg-slate-100 py-6 text-sm text-slate-600">
         <div className="mx-auto max-w-5xl px-4">
-          <p>Ultima actualizacion: octubre de 2025 - Gestion Online TramitesYA S.L.</p>
+          <p>Ultima actualizacion: octubre de 2025 - Gestion Online TramitesYA.</p>
         </div>
       </footer>
     </div>
