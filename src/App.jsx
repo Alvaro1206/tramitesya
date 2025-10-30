@@ -348,7 +348,7 @@ function Home({ goVida, goNota, goInforme }) {
 
       <footer className="border-t border-slate-200 bg-blue-900 py-8 text-blue-100">
         <div className="mx-auto max-w-6xl px-4 text-sm">
-          <p>(c) 2025 TramitesYA.com - Servicio privado de gestion y asistencia. No somos un portal oficial del Gobierno.</p>
+          <p>(c) 2025 TramitesYA - Servicio privado de gestion y asistencia. No somos un portal oficial del Gobierno.</p>
           <div className="mt-2 flex gap-4 underline">
             <Link to="/aviso-legal">Aviso legal</Link>
             <Link to="/politica-privacidad">Politica de privacidad</Link>
@@ -557,7 +557,7 @@ function NotaSimplePage({ goHome }) {
 
       <footer className="border-t border-slate-200 bg-blue-900 py-8 text-blue-100">
         <div className="mx-auto max-w-6xl px-4">
-          <p className="text-sm">(c) 2025 TramitesYA.com - Servicio privado de gestion y asistencia.</p>
+          <p className="text-sm">(c) 2025 TramitesYA - Servicio privado de gestion y asistencia.</p>
         </div>
       </footer>
     </div>
@@ -670,7 +670,7 @@ function InformeDGTPage({ goHome }) {
 
       <footer className="border-t border-slate-200 bg-blue-900 py-8 text-blue-100">
         <div className="mx-auto max-w-6xl px-4">
-          <p className="text-sm">(c) 2025 TramitesYAweb - Servicio privado de gestion y asistencia.</p>
+          <p className="text-sm">(c) 2025 TramitesYA - Servicio privado de gestion y asistencia.</p>
         </div>
       </footer>
     </div>
