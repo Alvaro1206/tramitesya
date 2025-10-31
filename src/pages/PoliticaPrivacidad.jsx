@@ -1,6 +1,12 @@
 import React from "react";
+import { usePageMetadata } from "../hooks/usePageMetadata.js";
 
 export default function PoliticaPrivacidad() {
+  usePageMetadata({
+    title: "TramitesYA - Politica de privacidad",
+    description:
+      "Conoce como recopilamos, usamos y protegemos tus datos personales en TramitesYA y como ejercer tus derechos.",
+  });
   return (
     <div className="min-h-screen bg-white text-slate-800">
       <header className="border-b border-slate-200 bg-blue-900 py-8 text-blue-100">

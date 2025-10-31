@@ -137,7 +137,7 @@ export function InformeDGTForm() {
 
   return (
     <form onSubmit={handleSubmit} className="mx-auto max-w-md rounded bg-white p-6 shadow-md">
-      <h2 className="mb-4 text-xl font-bold">Solicitud Informe DGT</h2>
+      <h3 className="mb-4 text-xl font-bold">Solicitud Informe DGT</h3>
 
       <div className="mb-4">
         <label className="block text-gray-700">Nombre completo:</label>

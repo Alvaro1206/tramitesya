@@ -8,6 +8,7 @@ import { InformeDGTForm } from "/src/components/InformeDGTForm.jsx";
 import AvisoLegal from "/src/pages/AvisoLegal.jsx";
 import PoliticaPrivacidad from "/src/pages/PoliticaPrivacidad.jsx";
 import CookiesPage from "/src/pages/Cookies.jsx";
+import { usePageMetadata } from "./hooks/usePageMetadata.js";
 import {
   ShieldCheck,
   FileText,
@@ -51,6 +52,11 @@ const StatChip = ({ icon: Icon, label }) => (
   </div>
 );
 function Home({ goVida, goNota, goInforme }) {
+  usePageMetadata({
+    title: "TramitesYA - Tramites online en 24-48 h",
+    description:
+      "Gestionamos vida laboral, nota simple e informe DGT sin desplazarte. Pagos seguros con entrega en 24-48 horas.",
+  });
   return (
     <div className="min-h-screen w-full bg-slate-50 text-slate-800">
       <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/90 backdrop-blur">
@@ -131,7 +137,7 @@ function Home({ goVida, goNota, goInforme }) {
                 <span className="text-sm">Equipo de gestion especializado</span>
               </div>
               <div className="rounded-2xl bg-white p-6 shadow-lg">
-                <h3 className="mb-2 text-lg font-semibold text-slate-900">Tramites destacados</h3>
+                <h2 className="mb-2 text-lg font-semibold text-slate-900">Tramites destacados</h2>
                 <div className="space-y-4 text-sm text-slate-600">
                   <div className="rounded-xl border border-slate-200 p-3">
                     <div className="mb-1 font-semibold text-slate-900">Informe Vida Laboral</div>
@@ -360,6 +366,11 @@ function Home({ goVida, goNota, goInforme }) {
   );
 }
 function VidaLaboralPage({ goHome }) {
+  usePageMetadata({
+    title: "TramitesYA - Informe de Vida Laboral urgente",
+    description:
+      "Solicita el PDF oficial de la Seguridad Social con entrega en 24-48 horas. Servicio privado de asistencia en tramites laborales.",
+  });
   return (
     <div className="min-h-screen w-full bg-slate-50 text-slate-800">
       <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/90 backdrop-blur">
@@ -462,6 +473,11 @@ function VidaLaboralPage({ goHome }) {
   );
 }
 function NotaSimplePage({ goHome }) {
+  usePageMetadata({
+    title: "TramitesYA - Nota Simple Registral online",
+    description:
+      "Obten la nota simple del Registro de la Propiedad sin desplazarte. Entregamos el documento oficial en 24-48 horas laborables.",
+  });
   return (
     <div className="min-h-screen w-full bg-slate-50 text-slate-800">
       <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/90 backdrop-blur">
@@ -564,6 +580,11 @@ function NotaSimplePage({ goHome }) {
   );
 }
 function InformeDGTPage({ goHome }) {
+  usePageMetadata({
+    title: "TramitesYA - Informe DGT completo del vehiculo",
+    description:
+      "Consigue el historial de un vehiculo con datos de cargas, titularidad e ITV. Documento oficial emitido por la DGT en 24-48 horas.",
+  });
   return (
     <div className="min-h-screen w-full bg-slate-50 text-slate-800">
       <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/90 backdrop-blur">

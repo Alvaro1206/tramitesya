@@ -29,7 +29,7 @@ export default function SolicitudForm({ tipoTramite }) {
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
-      <h2 className="mb-4 text-2xl font-bold text-slate-900">Solicitar certificado</h2>
+      <h3 className="mb-4 text-2xl font-bold text-slate-900">Solicitar certificado</h3>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <input type="hidden" name="tipo_tramite" value={tipoTramite} />

@@ -1,7 +1,13 @@
 
 import React from "react";
+import { usePageMetadata } from "../hooks/usePageMetadata.js";
 
 export default function AvisoLegal() {
+  usePageMetadata({
+    title: "TramitesYA - Aviso legal y condiciones de uso",
+    description:
+      "Consulta los datos de titularidad, responsabilidades y condiciones de uso del servicio privado TramitesYA.",
+  });
   return (
     <div className="min-h-screen bg-white text-slate-800">
       <header className="border-b border-slate-200 bg-blue-900 py-8 text-blue-100">

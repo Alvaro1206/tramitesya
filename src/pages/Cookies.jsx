@@ -1,6 +1,12 @@
 import React from "react";
+import { usePageMetadata } from "../hooks/usePageMetadata.js";
 
 export default function CookiesPage() {
+  usePageMetadata({
+    title: "TramitesYA - Politica de cookies",
+    description:
+      "Informacion sobre el uso de cookies y tecnologias similares en TramitesYA y como gestionarlas desde tu navegador.",
+  });
   return (
     <div className="min-h-screen bg-white text-slate-800">
       <header className="border-b border-slate-200 bg-blue-900 py-8 text-blue-100">
