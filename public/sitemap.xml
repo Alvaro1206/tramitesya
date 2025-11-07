@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://tramitesyaweb.com/</loc>
@@ -7,39 +7,33 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://tramitesyaweb.com/vida-laboral</loc>
+    <loc>https://tramitesyaweb.com/tse</loc>
     <lastmod>2025-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://tramitesyaweb.com/nota-simple</loc>
+    <loc>https://tramitesyaweb.com/gracias</loc>
     <lastmod>2025-10-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://tramitesyaweb.com/informe-dgt</loc>
-    <lastmod>2025-10-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://tramitesyaweb.com/aviso-legal</loc>
     <lastmod>2025-10-31</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://tramitesyaweb.com/politica-privacidad</loc>
     <lastmod>2025-10-31</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://tramitesyaweb.com/cookies</loc>
     <lastmod>2025-10-31</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.3</priority>
   </url>
 </urlset>
