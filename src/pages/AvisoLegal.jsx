@@ -31,7 +31,7 @@ export default function AvisoLegal() {
             TramitesYA ofrece un servicio privado de preparación y presentación de solicitudes de Tarjeta Sanitaria Europea (TSE) ante la Seguridad Social española, mediante el canal sin certificado cuando el domicilio registrado coincide con el declarado por el usuario.
           </p>
           <p className="mt-3">
-            No somos la Seguridad Social ni un organismo público. Actuamos como representantes autorizados por el usuario y cobramos por la gestión (9,90 € titular + 5 € por beneficiario). El documento oficial TSE tiene un coste administrativo de 0 €.
+            No somos la Seguridad Social ni un organismo público. Actuamos como representantes autorizados por el usuario y cobramos por la gestión (9,90 € por solicitud). El documento oficial TSE tiene un coste administrativo de 0 €.
           </p>
         </section>
 

@@ -2,7 +2,6 @@
 
 const ORDERS_PATH = "/tmp/tse-orders.json";
 const BASE_PRICE = 9.9;
-const BENEFICIARY_PRICE = 5;
 const PAYPAL_API_BASE = process.env.PAYPAL_API_BASE ?? "https://api-m.paypal.com";
 const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID ?? "";
 const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET ?? "";
@@ -60,9 +59,8 @@ export default async function handler(req, res) {
   }
 }
 
-function calculateAmount(form) {
-  const beneficiarios = Array.isArray(form?.beneficiarios) ? form.beneficiarios.length : 0;
-  return Number((BASE_PRICE + beneficiarios * BENEFICIARY_PRICE).toFixed(2));
+function calculateAmount() {
+  return Number(BASE_PRICE.toFixed(2));
 }
 
 async function verifyCapture(captureId) {

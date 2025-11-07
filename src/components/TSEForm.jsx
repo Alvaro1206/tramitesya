@@ -2,6 +2,7 @@
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 
+const PAYPAL_DIRECT_LINK = "https://www.paypal.com/ncp/payment/VAD6LNSE7EXLY";
 const DOC_TYPES = ["DNI", "NIE", "Pasaporte"];
 const VIA_TYPES = ["Calle", "Avenida", "Plaza", "Camino", "Carretera", "Urbanización", "Paseo", "Travesía"];
 const PROVINCES = [
@@ -11,10 +12,7 @@ const PROVINCES = [
   "Pontevedra", "Salamanca", "Santa Cruz de Tenerife", "Segovia", "Sevilla", "Soria", "Tarragona", "Teruel", "Toledo", "Valencia", "Valladolid",
   "Bizkaia", "Zamora", "Zaragoza", "Ceuta", "Melilla",
 ];
-const PARENTESCOS = ["Hijo/a", "Cónyuge", "Pareja registrada", "Otro beneficiario"];
-
 const BASE_PRICE = 9.9;
-const BENEFICIARY_PRICE = 5;
 
 const DNI_REGEX = /^\d{8}[A-HJ-NP-TV-Z]$/i;
 const NIE_REGEX = /^[XYZ]\d{7}[A-HJ-NP-TV-Z]$/i;
@@ -23,13 +21,6 @@ const NAF_REGEX = /^\d{12}$/;
 const POSTAL_REGEX = /^(0[1-9]|[1-4]\d|5[0-2])\d{3}$/;
 const PHONE_REGEX = /^(\+34|0034)?\s?[6-9]\d{8}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const initialBeneficiario = {
-  nombre: "",
-  documento: "",
-  fechaNacimiento: "",
-  parentesco: "Hijo/a",
-};
 
 const initialFormState = {
   nombre: "",
@@ -50,7 +41,6 @@ const initialFormState = {
   direccionAlternativa: false,
   telefono: "",
   email: "",
-  beneficiarios: [],
   autorizacion: false,
   aceptaPrivacidad: false,
   firma: "",
@@ -66,29 +56,11 @@ export default function TSEForm() {
 
   const paypalClientId = import.meta.env.VITE_PAYPAL_CLIENT_ID ?? "";
 
-  const total = React.useMemo(() => BASE_PRICE + form.beneficiarios.length * BENEFICIARY_PRICE, [form.beneficiarios.length]);
+  const total = BASE_PRICE;
 
   const handleFieldChange = (field) => (event) => {
     const value = event.target.type === "checkbox" ? event.target.checked : event.target.value;
     setForm((prev) => ({ ...prev, [field]: field === "numeroDocumento" ? value.toUpperCase() : value }));
-    setFormValidated(false);
-  };
-
-  const handleBeneficiarioChange = (index, field, value) => {
-    setForm((prev) => {
-      const updated = prev.beneficiarios.map((benef, idx) => (idx === index ? { ...benef, [field]: field === "documento" ? value.toUpperCase() : value } : benef));
-      return { ...prev, beneficiarios: updated };
-    });
-    setFormValidated(false);
-  };
-
-  const addBeneficiario = () => {
-    setForm((prev) => ({ ...prev, beneficiarios: [...prev.beneficiarios, { ...initialBeneficiario }] }));
-    setFormValidated(false);
-  };
-
-  const removeBeneficiario = (index) => {
-    setForm((prev) => ({ ...prev, beneficiarios: prev.beneficiarios.filter((_, idx) => idx !== index) }));
     setFormValidated(false);
   };
 
@@ -98,7 +70,7 @@ export default function TSEForm() {
     if (Object.keys(validation).length === 0) {
       setFormValidated(true);
       setStatusMessage("Datos validados. Ya puedes pagar con PayPal.");
-      trackEvent("tse_preview_ok", { total: total.toFixed(2), beneficiarios: form.beneficiarios.length });
+      trackEvent("tse_preview_ok", { total: total.toFixed(2) });
     } else {
       setFormValidated(false);
       setStatusMessage("Revisa los campos marcados antes de continuar.");
@@ -224,53 +196,15 @@ export default function TSEForm() {
           </div>
         </Section>
 
-        <Section title="Beneficiarios (opcional)">
-          <p className="text-sm text-slate-500">Añade beneficiarios que dependen del titular. Cada uno suma 5,00 € al total.</p>
-          {form.beneficiarios.map((beneficiario, index) => (
-            <div key={index} className="rounded-2xl border border-slate-200 p-4">
-              <div className="flex items-center justify-between">
-                <p className="font-semibold">Beneficiario #{index + 1}</p>
-                <button type="button" onClick={() => removeBeneficiario(index)} className="text-sm text-red-600">
-                  Eliminar
-                </button>
-              </div>
-              <div className="mt-4 grid gap-4 md:grid-cols-2">
-                <InputField label="Nombre y apellidos" id={`benef-nombre-${index}`} value={beneficiario.nombre} onChange={(e) => handleBeneficiarioChange(index, "nombre", e.target.value)} error={errors[`beneficiarios.${index}.nombre`]} required />
-                <FieldWrapper label="Parentesco" htmlFor={`benef-parentesco-${index}`} error={errors[`beneficiarios.${index}.parentesco`]}>
-                  <select
-                    id={`benef-parentesco-${index}`}
-                    value={beneficiario.parentesco}
-                    onChange={(e) => handleBeneficiarioChange(index, "parentesco", e.target.value)}
-                    className="w-full rounded-2xl border border-slate-300 px-3 py-2"
-                  >
-                    {PARENTESCOS.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </FieldWrapper>
-              </div>
-              <div className="mt-4 grid gap-4 md:grid-cols-2">
-                <InputField label="Documento (si tiene)" id={`benef-doc-${index}`} value={beneficiario.documento} onChange={(e) => handleBeneficiarioChange(index, "documento", e.target.value)} error={errors[`beneficiarios.${index}.documento`]} />
-                <InputField label="Fecha de nacimiento" type="date" id={`benef-fecha-${index}`} value={beneficiario.fechaNacimiento} onChange={(e) => handleBeneficiarioChange(index, "fechaNacimiento", e.target.value)} error={errors[`beneficiarios.${index}.fechaNacimiento`]} />
-              </div>
-            </div>
-          ))}
-          <button type="button" onClick={addBeneficiario} className="text-sm font-semibold text-blue-700">
-            + Añadir beneficiario
-          </button>
-        </Section>
-
         <Section title="Consentimientos">
-          <CheckboxField id="autorizacion" checked={form.autorizacion} onChange={handleFieldChange("autorizacion")} label="Autorizo a TramitesYA a presentar esta solicitud/renovación de TSE en mi nombre (y de mis beneficiarios)." error={errors.autorizacion} required />
+          <CheckboxField id="autorizacion" checked={form.autorizacion} onChange={handleFieldChange("autorizacion")} label="Autorizo a TramitesYA a presentar esta solicitud/renovación de TSE en mi nombre." error={errors.autorizacion} required />
           <CheckboxField id="aceptaPrivacidad" checked={form.aceptaPrivacidad} onChange={handleFieldChange("aceptaPrivacidad")} label="Acepto la Política de Privacidad y Términos" error={errors.aceptaPrivacidad} required />
           <InputField label="Firma (nombre completo)" id="firma" value={form.firma} onChange={handleFieldChange("firma")} error={errors.firma} required />
         </Section>
 
         <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-700">
           <p>
-            Total: <span className="font-semibold">{total.toFixed(2)} €</span> (9,90 € titular + {form.beneficiarios.length} beneficiarios × 5,00 €)
+            Total: <span className="font-semibold">{total.toFixed(2)} €</span>
           </p>
         </div>
 
@@ -307,15 +241,22 @@ export default function TSEForm() {
                   setStatusMessage("No se pudo iniciar el pago. Revisa la conexión e inténtalo de nuevo.");
                 }}
               />
+              <PayPalDirectLink />
               <p className="text-xs text-slate-500">El cobro se captura en el momento. Recibirás el justificante por email.</p>
             </div>
           ) : (
-            <p className="text-sm text-slate-500">Valida el formulario para activar el pago.</p>
+            <div className="space-y-2 text-sm text-slate-500">
+              <p>Valida el formulario para activar el pago.</p>
+              <PayPalDirectLink />
+            </div>
           )
         ) : (
-          <p className="text-sm text-red-600">
-            No se ha configurado el PAYPAL_CLIENT_ID. Añádelo como VITE_PAYPAL_CLIENT_ID para habilitar el pago.
-          </p>
+          <div className="space-y-2 text-sm">
+            <p className="text-red-600">
+              No se ha configurado el PAYPAL_CLIENT_ID. Añádelo como VITE_PAYPAL_CLIENT_ID para habilitar el pago.
+            </p>
+            <PayPalDirectLink />
+          </div>
         )}
       </form>
     </PayPalScriptProvider>
@@ -401,17 +342,6 @@ function validateForm(form) {
   if (!form.telefono.trim() || !PHONE_REGEX.test(form.telefono.trim())) newErrors.telefono = "Teléfono español inválido";
   if (!form.email.trim() || !EMAIL_REGEX.test(form.email.trim())) newErrors.email = "Email inválido";
 
-  form.beneficiarios.forEach((beneficiario, index) => {
-    if (!beneficiario.nombre.trim()) newErrors[`beneficiarios.${index}.nombre`] = "Nombre requerido";
-    if (!beneficiario.parentesco) newErrors[`beneficiarios.${index}.parentesco`] = "Selecciona parentesco";
-    if (!beneficiario.documento.trim() && !beneficiario.fechaNacimiento) {
-      newErrors[`beneficiarios.${index}.documento`] = "Documento o fecha de nacimiento obligatoria";
-    }
-    if (beneficiario.documento.trim() && !isBeneficiarioDocumentoValido(beneficiario.documento.trim())) {
-      newErrors[`beneficiarios.${index}.documento`] = "Documento no válido";
-    }
-  });
-
   if (!form.autorizacion) newErrors.autorizacion = "Necesitamos tu autorización";
   if (!form.aceptaPrivacidad) newErrors.aceptaPrivacidad = "Debes aceptar la política";
   if (!form.firma.trim()) newErrors.firma = "Introduce tu firma";
@@ -440,15 +370,6 @@ function isDocumentoValido(tipo, valor) {
   return false;
 }
 
-function isBeneficiarioDocumentoValido(valor) {
-  const normalized = valor.toUpperCase();
-  return (
-    isDocumentoValido("DNI", normalized) ||
-    isDocumentoValido("NIE", normalized) ||
-    isDocumentoValido("Pasaporte", normalized)
-  );
-}
-
 function getDNILetter(numero) {
   const letters = "TRWAGMYFPDXBNJZSQVHLCKE";
   const index = parseInt(numero, 10) % 23;
@@ -459,4 +380,17 @@ function trackEvent(event, detail = {}) {
   if (typeof window === "undefined") return;
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event, ...detail });
+}
+
+function PayPalDirectLink() {
+  return (
+    <a
+      className="inline-flex items-center gap-2 rounded-2xl border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-50"
+      href={PAYPAL_DIRECT_LINK}
+      target="_blank"
+      rel="noreferrer"
+    >
+      Ir al enlace directo de PayPal
+    </a>
+  );
 }

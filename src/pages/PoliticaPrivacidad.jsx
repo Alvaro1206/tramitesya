@@ -32,7 +32,6 @@ export default function PoliticaPrivacidad() {
             <li>Datos identificativos del titular: nombre y apellidos, fecha de nacimiento, tipo y número de documento (DNI/NIE/Pasaporte) y, si se facilita, número de la Seguridad Social.</li>
             <li>Datos de domicilio: tipo de vía, dirección completa, código postal, municipio y provincia. Es obligatorio que coincidan con los registrados en la Seguridad Social para usar el canal sin certificado.</li>
             <li>Datos de contacto: teléfono móvil español y correo electrónico.</li>
-            <li>Beneficiarios opcionales: nombre y apellidos, parentesco y documento o fecha de nacimiento.</li>
             <li>Información transaccional: referencias de pago generadas por PayPal (orderID, captureID, importe abonado).</li>
           </ul>
         </section>

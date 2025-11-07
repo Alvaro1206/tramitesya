@@ -29,7 +29,7 @@ export default function CookiesPage() {
           <ul className="mt-3 list-disc space-y-2 pl-6">
             <li><strong>Esenciales:</strong> necesarias para que el formulario y la pasarela de pago funcionen. Incluyen las cookies que inyecta PayPal al renderizar los Smart Buttons.</li>
             <li><strong>De analítica ligera:</strong> podemos usar herramientas anónimas para medir eventos como <code>tse_preview_ok</code> o <code>tse_submitted</code>. Se recogen sin identificar al usuario.</li>
-            <li><strong>Funcionales:</strong> permiten recordar temporalmente tus elecciones (tipo de vía, beneficiarios añadidos) mientras navegas.</li>
+            <li><strong>Funcionales:</strong> permiten recordar temporalmente tus elecciones (tipo de vía o campos ya validados) mientras navegas.</li>
           </ul>
         </section>
 

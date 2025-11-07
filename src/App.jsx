@@ -36,7 +36,7 @@ const PROCESS_CARDS = [
   },
   {
     title: "Pagas con PayPal.",
-    description: "Cobramos 9,90 € por titular + 5 € por beneficiario.",
+    description: "Cobramos 9,90 € por titular.",
   },
   {
     title: "Presentamos y te enviamos la referencia. La TSE llega por correo.",
