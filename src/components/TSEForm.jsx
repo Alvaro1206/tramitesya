@@ -1,14 +1,14 @@
-import React from "react";
+Ôªøimport React from "react";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 
 const PAYPAL_DIRECT_LINK = "https://www.paypal.com/ncp/payment/VAD6LNSE7EXLY";
 const DOC_TYPES = ["DNI", "NIE", "Pasaporte"];
-const VIA_TYPES = ["Calle", "Avenida", "Plaza", "Camino", "Carretera", "UrbanizaciÛn", "Paseo", "TravesÌa"];
+const VIA_TYPES = ["Calle", "Avenida", "Plaza", "Camino", "Carretera", "Urbanizaci√≥n", "Paseo", "Traves√≠a"];
 const PROVINCES = [
-  "¡lava", "Albacete", "Alicante", "AlmerÌa", "Asturias", "¡vila", "Badajoz", "Barcelona", "Burgos", "C·ceres", "C·diz", "Cantabria",
-  "CastellÛn", "Ciudad Real", "CÛrdoba", "Cuenca", "Girona", "Granada", "Guadalajara", "Gipuzkoa", "Huelva", "Huesca", "Illes Balears",
-  "JaÈn", "La CoruÒa", "La Rioja", "Las Palmas", "LeÛn", "Lleida", "Lugo", "Madrid", "M·laga", "Murcia", "Navarra", "Ourense", "Palencia",
+  "√Ålava", "Albacete", "Alicante", "Almer√≠a", "Asturias", "√Åvila", "Badajoz", "Barcelona", "Burgos", "C√°ceres", "C√°diz", "Cantabria",
+  "Castell√≥n", "Ciudad Real", "C√≥rdoba", "Cuenca", "Girona", "Granada", "Guadalajara", "Gipuzkoa", "Huelva", "Huesca", "Illes Balears",
+  "Ja√©n", "La Coru√±a", "La Rioja", "Las Palmas", "Le√≥n", "Lleida", "Lugo", "Madrid", "M√°laga", "Murcia", "Navarra", "Ourense", "Palencia",
   "Pontevedra", "Salamanca", "Santa Cruz de Tenerife", "Segovia", "Sevilla", "Soria", "Tarragona", "Teruel", "Toledo", "Valencia", "Valladolid",
   "Bizkaia", "Zamora", "Zaragoza", "Ceuta", "Melilla",
 ];
@@ -90,7 +90,7 @@ export default function TSEForm() {
       navigate(`/gracias?order=${encodeURIComponent(payload.orderId ?? data.orderID)}`);
     } catch (error) {
       console.error(error);
-      setStatusMessage("No hemos podido registrar el pago. IntÈntalo de nuevo o escrÌbenos a tramitesyaweb@gmail.com.");
+      setStatusMessage("No hemos podido registrar el pago. Int√©ntalo de nuevo o escr√≠benos a tramitesyaweb@gmail.com.");
     } finally {
       setIsSubmitting(false);
     }
@@ -104,7 +104,7 @@ export default function TSEForm() {
         setStatusMessage("Revisa los campos antes de pagar.");
         return actions.reject();
       }
-      setStatusMessage("Pago listo. Completa la transacciÛn.");
+      setStatusMessage("Pago listo. Completa la transacci√≥n.");
       trackEvent("tse_preview_ok", { total: total.toFixed(2) });
       return actions.resolve();
     },
@@ -125,8 +125,8 @@ export default function TSEForm() {
         <Section title="Titular">
           <div className="grid gap-4 md:grid-cols-2">
             <InputField label="Nombre" id="nombre" value={form.nombre} onChange={handleFieldChange("nombre")} error={errors.nombre} required />
-            <InputField label="1∫ apellido" id="primerApellido" value={form.primerApellido} onChange={handleFieldChange("primerApellido")} error={errors.primerApellido} required />
-            <InputField label="2∫ apellido (opcional)" id="segundoApellido" value={form.segundoApellido} onChange={handleFieldChange("segundoApellido")} />
+            <InputField label="1¬∫ apellido" id="primerApellido" value={form.primerApellido} onChange={handleFieldChange("primerApellido")} error={errors.primerApellido} required />
+            <InputField label="2¬∫ apellido (opcional)" id="segundoApellido" value={form.segundoApellido} onChange={handleFieldChange("segundoApellido")} />
             <InputField label="Fecha de nacimiento" type="date" id="fechaNacimiento" value={form.fechaNacimiento} onChange={handleFieldChange("fechaNacimiento")} error={errors.fechaNacimiento} required />
           </div>
           <div className="grid gap-4 md:grid-cols-3">
@@ -139,14 +139,14 @@ export default function TSEForm() {
                 ))}
               </select>
             </FieldWrapper>
-            <InputField label="N∫ documento" id="numeroDocumento" value={form.numeroDocumento} onChange={handleFieldChange("numeroDocumento")} error={errors.numeroDocumento} required />
-            <InputField label="N∫ Seguridad Social (NAF) (opcional)" id="numeroSeguridadSocial" value={form.numeroSeguridadSocial} onChange={handleFieldChange("numeroSeguridadSocial")} error={errors.numeroSeguridadSocial} placeholder="12 dÌgitos" />
+            <InputField label="N¬∫ documento" id="numeroDocumento" value={form.numeroDocumento} onChange={handleFieldChange("numeroDocumento")} error={errors.numeroDocumento} required />
+            <InputField label="N¬∫ Seguridad Social (NAF) (opcional)" id="numeroSeguridadSocial" value={form.numeroSeguridadSocial} onChange={handleFieldChange("numeroSeguridadSocial")} error={errors.numeroSeguridadSocial} placeholder="12 d√≠gitos" />
           </div>
         </Section>
 
-        <Section title="Domicilio de envÌo (EspaÒa)">
+        <Section title="Domicilio de env√≠o (Espa√±a)">
           <div className="grid gap-4 md:grid-cols-3">
-            <FieldWrapper label="Tipo de vÌa" htmlFor="tipoVia" error={errors.tipoVia}>
+            <FieldWrapper label="Tipo de v√≠a" htmlFor="tipoVia" error={errors.tipoVia}>
               <select id="tipoVia" value={form.tipoVia} onChange={handleFieldChange("tipoVia")} className="w-full rounded-2xl border border-slate-300 px-3 py-2">
                 <option value="">Selecciona</option>
                 {VIA_TYPES.map((via) => (
@@ -156,12 +156,12 @@ export default function TSEForm() {
                 ))}
               </select>
             </FieldWrapper>
-            <InputField label="VÌa" id="via" value={form.via} onChange={handleFieldChange("via")} error={errors.via} required />
-            <InputField label="N∫" id="numero" value={form.numero} onChange={handleFieldChange("numero")} error={errors.numero} required />
+            <InputField label="V√≠a" id="via" value={form.via} onChange={handleFieldChange("via")} error={errors.via} required />
+            <InputField label="N¬∫" id="numero" value={form.numero} onChange={handleFieldChange("numero")} error={errors.numero} required />
           </div>
           <div className="grid gap-4 md:grid-cols-3">
             <InputField label="Piso / puerta (opcional)" id="piso" value={form.piso} onChange={handleFieldChange("piso")} />
-            <InputField label="CÛdigo postal" id="codigoPostal" value={form.codigoPostal} onChange={handleFieldChange("codigoPostal")} error={errors.codigoPostal} required />
+            <InputField label="C√≥digo postal" id="codigoPostal" value={form.codigoPostal} onChange={handleFieldChange("codigoPostal")} error={errors.codigoPostal} required />
             <InputField label="Municipio" id="municipio" value={form.municipio} onChange={handleFieldChange("municipio")} error={errors.municipio} required />
           </div>
           <FieldWrapper label="Provincia" htmlFor="provincia" error={errors.provincia}>
@@ -176,14 +176,14 @@ export default function TSEForm() {
           </FieldWrapper>
           <div className="space-y-3">
             <CheckboxField id="declaroDomicilio" checked={form.declaroDomicilio} onChange={handleFieldChange("declaroDomicilio")} label="Declaro que este domicilio coincide con el registrado en la Seguridad Social (requerido para el canal sin certificado)." error={errors.declaroDomicilio} required />
-            <CheckboxField id="direccionAlternativa" checked={form.direccionAlternativa} onChange={handleFieldChange("direccionAlternativa")} label="Quiero recibirla en otra direcciÛn en EspaÒa (requiere validaciÛn por SMS al mÛvil registrado)." />
+            <CheckboxField id="direccionAlternativa" checked={form.direccionAlternativa} onChange={handleFieldChange("direccionAlternativa")} label="Quiero recibirla en otra direcci√≥n en Espa√±a (requiere validaci√≥n por SMS al m√≥vil registrado)." />
           </div>
         </Section>
 
         <Section title="Contacto">
           <div className="grid gap-4 md:grid-cols-2">
             <InputField
-              label="TelÈfono EspaÒa"
+              label="Tel√©fono Espa√±a"
               id="telefono"
               type="tel"
               value={form.telefono}
@@ -197,14 +197,14 @@ export default function TSEForm() {
         </Section>
 
         <Section title="Consentimientos">
-          <CheckboxField id="autorizacion" checked={form.autorizacion} onChange={handleFieldChange("autorizacion")} label="Autorizo a TramitesYA a presentar esta solicitud/renovaciÛn de TSE en mi nombre." error={errors.autorizacion} required />
-          <CheckboxField id="aceptaPrivacidad" checked={form.aceptaPrivacidad} onChange={handleFieldChange("aceptaPrivacidad")} label="Acepto la PolÌtica de Privacidad y TÈrminos" error={errors.aceptaPrivacidad} required />
+          <CheckboxField id="autorizacion" checked={form.autorizacion} onChange={handleFieldChange("autorizacion")} label="Autorizo a TramitesYA a presentar esta solicitud/renovaci√≥n de TSE en mi nombre." error={errors.autorizacion} required />
+          <CheckboxField id="aceptaPrivacidad" checked={form.aceptaPrivacidad} onChange={handleFieldChange("aceptaPrivacidad")} label="Acepto la Pol√≠tica de Privacidad y T√©rminos" error={errors.aceptaPrivacidad} required />
           <InputField label="Firma (nombre completo)" id="firma" value={form.firma} onChange={handleFieldChange("firma")} error={errors.firma} required />
         </Section>
 
         <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-700">
           <p>
-            Total: <span className="font-semibold">{total.toFixed(2)} Ä</span>
+            Total: <span className="font-semibold">{total.toFixed(2)} ‚Ç¨</span>
           </p>
         </div>
 
@@ -214,7 +214,7 @@ export default function TSEForm() {
 
         <div className="space-y-3">
           <p className="text-sm font-semibold text-slate-700">Pago</p>
-          {paypalClientId ? (
+          {paypalClientId && (
             <PayPalButtons
               style={{ layout: "vertical", label: "pay" }}
               disabled={isSubmitting}
@@ -234,16 +234,12 @@ export default function TSEForm() {
               onApprove={handleApprove}
               onError={(error) => {
                 console.error(error);
-                setStatusMessage("No se pudo iniciar el pago. Revisa la conexiÛn e intÈntalo de nuevo.");
+                setStatusMessage("No se pudo iniciar el pago. Revisa la conexi√≥n e int√©ntalo de nuevo.");
               }}
             />
-          ) : (
-            <p className="text-sm text-red-600">
-              No se ha configurado el PAYPAL_CLIENT_ID. AÒ·delo como VITE_PAYPAL_CLIENT_ID para habilitar el pago.
-            </p>
           )}
           <PayPalDirectLink />
-          <p className="text-xs text-slate-500">El cobro se captura en el momento. Recibir·s el justificante por email.</p>
+          <p className="text-xs text-slate-500">El cobro se captura en el momento. Recibir√°s el justificante por email.</p>
         </div>
       </form>
     </PayPalScriptProvider>
@@ -310,27 +306,27 @@ function validateForm(form) {
   if (!form.tipoDocumento) newErrors.tipoDocumento = "Selecciona el tipo de documento";
   if (!form.numeroDocumento.trim()) newErrors.numeroDocumento = "Introduce el documento";
   else if (!isDocumentoValido(form.tipoDocumento, form.numeroDocumento.trim())) {
-    newErrors.numeroDocumento = "Documento no v·lido";
+    newErrors.numeroDocumento = "Documento no v√°lido";
   }
 
   if (form.numeroSeguridadSocial && !NAF_REGEX.test(form.numeroSeguridadSocial.trim())) {
-    newErrors.numeroSeguridadSocial = "El NAF debe tener 12 dÌgitos";
+    newErrors.numeroSeguridadSocial = "El NAF debe tener 12 d√≠gitos";
   }
 
-  if (!form.tipoVia) newErrors.tipoVia = "Selecciona el tipo de vÌa";
-  if (!form.via.trim()) newErrors.via = "Completa la vÌa";
-  if (!form.numero.trim()) newErrors.numero = "Indica el n˙mero";
-  if (!form.codigoPostal.trim() || !POSTAL_REGEX.test(form.codigoPostal.trim())) newErrors.codigoPostal = "CÛdigo postal inv·lido";
+  if (!form.tipoVia) newErrors.tipoVia = "Selecciona el tipo de v√≠a";
+  if (!form.via.trim()) newErrors.via = "Completa la v√≠a";
+  if (!form.numero.trim()) newErrors.numero = "Indica el n√∫mero";
+  if (!form.codigoPostal.trim() || !POSTAL_REGEX.test(form.codigoPostal.trim())) newErrors.codigoPostal = "C√≥digo postal inv√°lido";
   if (!form.municipio.trim()) newErrors.municipio = "Indica el municipio";
   if (!form.provincia) newErrors.provincia = "Selecciona una provincia";
 
   if (!form.declaroDomicilio) newErrors.declaroDomicilio = "Es necesario confirmar el domicilio registrado";
 
-  if (!form.telefono.trim() || !PHONE_REGEX.test(form.telefono.trim())) newErrors.telefono = "TelÈfono espaÒol inv·lido";
-  if (!form.email.trim() || !EMAIL_REGEX.test(form.email.trim())) newErrors.email = "Email inv·lido";
+  if (!form.telefono.trim() || !PHONE_REGEX.test(form.telefono.trim())) newErrors.telefono = "Tel√©fono espa√±ol inv√°lido";
+  if (!form.email.trim() || !EMAIL_REGEX.test(form.email.trim())) newErrors.email = "Email inv√°lido";
 
-  if (!form.autorizacion) newErrors.autorizacion = "Necesitamos tu autorizaciÛn";
-  if (!form.aceptaPrivacidad) newErrors.aceptaPrivacidad = "Debes aceptar la polÌtica";
+  if (!form.autorizacion) newErrors.autorizacion = "Necesitamos tu autorizaci√≥n";
+  if (!form.aceptaPrivacidad) newErrors.aceptaPrivacidad = "Debes aceptar la pol√≠tica";
   if (!form.firma.trim()) newErrors.firma = "Introduce tu firma";
 
   return newErrors;
@@ -372,12 +368,13 @@ function trackEvent(event, detail = {}) {
 function PayPalDirectLink() {
   return (
     <a
-      className="inline-flex items-center gap-2 rounded-2xl border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-50"
+      className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-700 px-6 py-4 text-base font-semibold text-white shadow-xl transition hover:bg-blue-800"
       href={PAYPAL_DIRECT_LINK}
       target="_blank"
       rel="noreferrer"
     >
-      Ir al enlace directo de PayPal
+      Pagar ahora
     </a>
   );
 }
+
