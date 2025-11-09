@@ -1,0 +1,57 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  createdAt     DateTime    @default(now())
+  status        OrderStatus @default(PAID)
+  amountEur     Decimal     @db.Decimal(10, 2)
+  paypalOrderId String
+  paypalCapture String?
+  sedeRef       String?
+
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String
+  address    Address  @relation(fields: [addressId], references: [id])
+  addressId  String
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  surname1  String
+  surname2  String?
+  birthDate DateTime
+  docType   String
+  docEnc    Bytes?
+  nafEnc    Bytes?
+  phone     String
+  email     String
+  orders    Order[]
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  via       String
+  line1     String
+  line2     String?
+  postal    String
+  city      String
+  province  String
+  coincide  Boolean
+  otherAddr Boolean
+  orders    Order[]
+}
+
+enum OrderStatus {
+  PAID
+  SUBMITTED
+  ISSUE
+  REFUNDED
+}

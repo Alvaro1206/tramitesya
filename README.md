@@ -1,47 +1,85 @@
-﻿# TramitesYA · TSE sin certificado
+# Trámites YA – Tarjeta Sanitaria Europea (TSE)
 
-TramitesYA es una single page app en React + Vite desplegada en Vercel que ofrece un único servicio: gestionar la Tarjeta Sanitaria Europea (TSE) por el canal sin certificado. Todo el copy, SEO y flujo se han adaptado para esta operación.
+Aplicación Next.js (App Router + TypeScript + Tailwind) desplegable en Vercel. Gestiona solicitudes de la Tarjeta Sanitaria Europea sin beneficiarios, cobra la gestión con PayPal Business y guarda los datos cifrados en Postgres mediante Prisma.
 
-## Requisitos y variables de entorno
+## Stack
 
-| Variable | Dónde se usa | Descripción |
-| --- | --- | --- |
-| `VITE_PAYPAL_CLIENT_ID` | Frontend | Client ID de PayPal (Live o Sandbox) para cargar los Smart Buttons. |
-| `PAYPAL_CLIENT_ID` | API | Mismo client ID, usado para verificar capturas. |
-| `PAYPAL_CLIENT_SECRET` | API | Secret asociado al client ID para obtener tokens. |
-| `PAYPAL_API_BASE` (opcional) | Frontend + API | URL base de la API de PayPal. Por defecto `https://api-m.paypal.com`. Usar `https://api-m.sandbox.paypal.com` para pruebas. |
+- Next.js 14 (App Router) + React 18
+- Tailwind CSS
+- Prisma ORM sobre Postgres (Neon / Vercel Postgres)
+- Pasarela PayPal (captura directa)
+- Cifrado AES-256-GCM para DNI/NIE/NAF
 
-## Scripts
+---
+
+## 1. Crear la base de datos (Neon o Vercel Postgres)
+
+1. **Neon**: crea un nuevo proyecto PostgreSQL → copia la `postgresql://` connection string con `sslmode=require`.  
+   **Vercel Postgres**: desde el dashboard crea la base y pulsa “Copy Connection String”.
+2. Ajusta los parámetros regionales deseados.
+3. Si usas Neon, crea al menos un branch `main` y habilita autosuspend (opcional).
+4. Guarda la cadena completa porque se utilizará en Prisma (`POSTGRES_URL`).
+
+---
+
+## 2. Variables de entorno
+
+1. Duplica el archivo `.env.local.example` → `.env.local`.
+2. Rellena:
+   - `POSTGRES_URL`: cadena copiada de Neon/Vercel Postgres.
+   - `NEXT_PUBLIC_PAYPAL_CLIENT_ID`: Client ID del PayPal app (Sandbox o Prod) visible en el dashboard para poder cargar el SDK en el navegador.
+   - `PAYPAL_CLIENT_ID` y `PAYPAL_SECRET`: credenciales Server-to-Server de la misma app de PayPal.
+   - `PAYPAL_API_BASE`: `https://api-m.sandbox.paypal.com` en pruebas, cambia a `https://api-m.paypal.com` en producción.
+   - `DATA_ENC_SECRET`: secreto hexadecimal (>32 bytes) usado para derivar la clave AES-256-GCM.
+3. En Vercel replica exactamente las mismas variables (usa `.env.local` como referencia).
+
+---
+
+## 3. Prisma y base de datos
 
 ```bash
-npm install      # instala dependencias
-npm run dev      # levanta Vite en modo desarrollo
-npm run build    # build de producción
-npm run preview  # previsualiza el build
+npm install                  # instala dependencias
+npm run prisma:generate      # genera el cliente Prisma
+npm run prisma:migrate       # ejecuta `prisma migrate dev` (crea/actualiza el esquema)
+npm run prisma:studio        # (opcional) abre Prisma Studio para ver Orders/Customers/Addresses
 ```
 
-## Cómo probar el flujo TSE
+Cada registro de `Customer` almacena `docEnc` y `nafEnc` cifrados (IV|TAG|DATA) usando AES-256-GCM.
 
-1. Arranca `npm run dev` y abre `http://localhost:5173`.
-2. Completa el formulario en `/tse` con datos válidos (las validaciones para DNI/NIE/CP/teléfono/email se ejecutan en cliente).
-3. Pulsa “Validar datos”. Si todo es correcto se dispara el evento `tse_preview_ok` y se habilitan los PayPal Smart Buttons.
-4. Paga con una cuenta PayPal de pruebas. PayPal captura el importe inmediatamente (`tse_paypal_approved`).
-5. Al completarse la captura, el frontend envía `orderId`, `captureId`, formulario y total a `POST /api/tse/submit`. El endpoint vuelve a calcular el importe, consulta la captura en PayPal y guarda el pedido en `/tmp/tse-orders.json`. Si todo va bien se lanza `tse_submitted` y se redirige a `/gracias?order=...`.
-6. Para simular reembolsos puedes llamar manualmente a `POST /api/tse/refund` con `captureId` (y `amount` si es parcial). El endpoint vuelve a PayPal y actualiza el registro local.
+---
 
-> Nota: en Vercel el directorio `/tmp` es efímero pero sirve como almacenamiento temporal mientras se procesa el expediente.
+## 4. Arrancar y compilar
 
-## Endpoints
+```bash
+npm run dev      # entorno local, http://localhost:3000
+npm run build    # comprueba que el proyecto compila antes de desplegar en Vercel
+npm start        # sirve la build generada
+```
 
-- `POST /api/tse/submit`: valida importe, verifica la captura en PayPal v2 y persiste `{ orderId, captureId, form, amount, status }`. También deja logs simulando el email de confirmación y la creación de la tarea de tramitación.
-- `POST /api/tse/refund`: solicita un reembolso total o parcial vía PayPal y marca el pedido como `REFUNDED`/`PARTIAL_REFUND` en el JSON.
+El endpoint `GET /api/health` responde `{ ok: true }` cuando las variables sensibles están configuradas correctamente.
 
-## Redirects y SEO
+---
 
-- Las URLs históricas definidas en `vercel.json` redirigen con 301 a `/tse`.
-- `public/sitemap.xml`, `index.html` y los metadatos dinámicos (`usePageMetadata`) apuntan al mensaje “TSE sin certificado | TramitesYA”.
-- FAQ y schema JSON-LD reutilizan las 4 preguntas/ respuestas facilitadas.
+## 5. Probar `/tse` con PayPal Sandbox
 
-## Garantías legales y textos fijos
+1. En PayPal Developer crea una **REST App** (Business) y copia tanto el **Client ID** (frontend) como el **Secret** (backend).
+2. Introduce esas credenciales Sandbox en `.env.local`.
+3. Arranca la app (`npm run dev`) y abre `http://localhost:3000/tse`.
+4. Rellena el formulario con un DNI/NIE/NAF válido, marca las casillas obligatorias y pulsa el botón PayPal.
+5. Autentica con una cuenta **Buyer Sandbox** y finaliza la compra.  
+   - El SDK ejecutará `onApprove` → `actions.order.capture()` → POST `/api/tse/submit`.
+   - Recibirás una redirección automática a `/gracias?order=...`.
+6. Verifica el registro en Prisma Studio (`npm run prisma:studio`) para confirmar que se creó la orden (`status = PAID`, `amountEur = 9.90`).
 
-El footer y la página de TSE contienen los avisos solicitados: no somos la Seguridad Social, la TSE oficial cuesta 0 €, solo se cobra la gestión y existe reembolso del 100% si no se presenta la solicitud.
+Para marcar la referencia de Sede utiliza `POST /api/tse/mark-submitted` con `{ "orderId": "...", "ref": "..." }`, lo cual actualiza el estado a `SUBMITTED`.
+
+---
+
+## 6. Despliegue en Vercel
+
+1. Conecta el repositorio a Vercel.
+2. Configura las mismas variables de entorno (`POSTGRES_URL`, `NEXT_PUBLIC_PAYPAL_CLIENT_ID`, etc.).
+3. Ejecuta `npm run build` en CI (Vercel lo hace automáticamente) y despliega.
+4. Añade las rutas `/tse`, `/gracias` y los redirects definidos en `next.config.js` ya estarán disponibles.
+
+Listo. Con esto puedes gestionar todas las solicitudes TSE desde un único servicio.
