@@ -1,5 +1,7 @@
 // app/api/health/route.ts
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function GET() {
   const env = process.env.VERCEL_ENV || process.env.NODE_ENV || "unknown";
