@@ -3,6 +3,7 @@ export const runtime = "nodejs";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { encryptText } from "@/lib/crypto";
+import { getPayPalAccessToken, verifyPayPalCapture } from "@/lib/paypal";
 
 const ORDER_PRICE = "9.90";
 
@@ -11,38 +12,8 @@ async function verifyCapture(captureID?: string | null) {
     return true;
   }
 
-  const { PAYPAL_CLIENT_ID, PAYPAL_SECRET, PAYPAL_API_BASE } = process.env;
-  if (!PAYPAL_CLIENT_ID || !PAYPAL_SECRET || !PAYPAL_API_BASE) {
-    throw new Error("Credenciales de PayPal no configuradas");
-  }
-
-  const basicToken = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_SECRET}`).toString("base64");
-
-  const tokenResponse = await fetch(`${PAYPAL_API_BASE}/v1/oauth2/token`, {
-    method: "POST",
-    headers: {
-      Authorization: `Basic ${basicToken}`,
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: "grant_type=client_credentials",
-    cache: "no-store",
-  });
-
-  if (!tokenResponse.ok) {
-    return false;
-  }
-
-  const tokenData = await tokenResponse.json();
-  const captureResponse = await fetch(`${PAYPAL_API_BASE}/v2/payments/captures/${captureID}`, {
-    headers: { Authorization: `Bearer ${tokenData.access_token}` },
-    cache: "no-store",
-  });
-
-  if (!captureResponse.ok) {
-    return false;
-  }
-
-  const capture = await captureResponse.json();
+  const { access_token } = await getPayPalAccessToken();
+  const capture = await verifyPayPalCapture(captureID, access_token);
   return capture?.status === "COMPLETED";
 }
 

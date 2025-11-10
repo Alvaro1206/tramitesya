@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Script from "next/script";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { PayPalLoader } from "./PayPalLoader";
 
 declare global {
   interface Window {
@@ -190,7 +190,7 @@ export default function TSEPage() {
   const [error, setError] = useState<string | null>(null);
   const [paypalReady, setPaypalReady] = useState(false);
   const payRef = useRef<HTMLDivElement>(null);
-  const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID ?? "";
+  const handlePayPalReady = useCallback(() => setPaypalReady(true), []);
 
   useEffect(() => {
     if (!paypalReady || !payRef.current || !window.paypal) return;
@@ -269,11 +269,7 @@ export default function TSEPage() {
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-12">
-      <Script
-        src={`https://www.paypal.com/sdk/js?client-id=${clientId}&currency=EUR&components=buttons`}
-        strategy="afterInteractive"
-        onLoad={() => setPaypalReady(true)}
-      />
+      <PayPalLoader onReady={handlePayPalReady} />
       <p className="text-sm text-indigo-500">Servicio sin beneficiarios</p>
       <h1 className="mt-1 text-3xl font-bold text-slate-900">
         Tarjeta Sanitaria Europea <span className="text-indigo-600">sin certificado</span>

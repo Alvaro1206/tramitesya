@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { ENV } from "./env";
 
 let cachedKey: Buffer | null = null;
 
@@ -7,12 +8,7 @@ function getKey() {
     return cachedKey;
   }
 
-  const secret = process.env.DATA_ENC_SECRET;
-  if (!secret) {
-    throw new Error("DATA_ENC_SECRET is not defined");
-  }
-
-  cachedKey = crypto.createHash("sha256").update(secret).digest();
+  cachedKey = crypto.createHash("sha256").update(ENV.DATA_ENC_SECRET).digest();
   return cachedKey;
 }
 
