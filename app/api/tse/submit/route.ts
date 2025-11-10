@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { encryptText } from "@/lib/crypto";
 import { getPayPalAccessToken, verifyPayPalCapture } from "@/lib/paypal";
 
@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "Pago no verificado" }, { status: 400 });
     }
 
+    const prisma = getPrisma();
     const order = await prisma.order.create({
       data: {
         amountEur: ORDER_PRICE,

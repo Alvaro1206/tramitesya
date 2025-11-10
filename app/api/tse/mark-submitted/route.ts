@@ -2,7 +2,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
@@ -15,6 +15,7 @@ export async function POST(req: Request) {
       });
     }
 
+    const prisma = getPrisma();
     await prisma.order.update({
       where: { id: orderId },
       data: { status: "SUBMITTED", sedeRef: ref },
