@@ -9,6 +9,7 @@ import {
   VIA_OPTIONS,
   buildPayload,
   defaultAddress,
+  defaultOptionalAddress,
   formSchema,
   type FormValues,
 } from "./schema";
@@ -53,7 +54,7 @@ export default function TSEPage() {
         naf: "",
       },
       domicilio: { ...defaultAddress },
-      otraDireccion: { ...defaultAddress },
+      otraDireccion: defaultOptionalAddress,
       contacto: {
         telefono: "",
         email: "",
@@ -73,15 +74,14 @@ export default function TSEPage() {
 
   useEffect(() => {
     if (!watchOtraDireccion) {
-      resetField("otraDireccion");
+      resetField("otraDireccion", { defaultValue: defaultOptionalAddress });
     }
   }, [watchOtraDireccion, resetField]);
 
   const canSubmit = useMemo(() => {
     const hasDomicilioChoice = watchDomCoincide || watchOtraDireccion;
-    const hasConsents = watchMandato && watchPrivacidad;
-    return hasDomicilioChoice && hasConsents;
-  }, [watchDomCoincide, watchMandato, watchOtraDireccion, watchPrivacidad]);
+    return formState.isValid && hasDomicilioChoice && watchMandato && watchPrivacidad;
+  }, [formState.isValid, watchDomCoincide, watchMandato, watchOtraDireccion, watchPrivacidad]);
 
   const runValidation = useCallback(async () => {
     let validData: FormValues | null = null;

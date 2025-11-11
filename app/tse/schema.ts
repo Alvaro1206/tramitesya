@@ -205,6 +205,8 @@ export const defaultAddress: AddressValues = {
   provincia: "",
 };
 
+export const defaultOptionalAddress: OptionalAddressValues = {};
+
 export type AddressPayload = {
   via: string;
   direccion: string;
