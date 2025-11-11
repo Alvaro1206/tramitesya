@@ -15,7 +15,7 @@ const CSP = [
   `frame-src 'self' ${PAYPAL_DOMAINS.join(" ")}`,
   `connect-src 'self' https://api-m.paypal.com https://api-m.sandbox.paypal.com ${PAYPAL_DOMAINS.join(" ")}`,
   `img-src 'self' data: blob: ${PAYPAL_DOMAINS.join(" ")}`,
-  `script-src 'self' ${PAYPAL_DOMAINS.join(" ")}`,
+  `script-src 'self' 'unsafe-inline' ${PAYPAL_DOMAINS.join(" ")}`,
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' data: https://fonts.gstatic.com",
   "upgrade-insecure-requests",
