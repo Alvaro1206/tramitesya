@@ -1,218 +1,245 @@
 import Link from "next/link";
 
 const highlights = [
-  { title: "Pago seguro", desc: "Con PayPal Business y comprobantes automáticos." },
-  { title: "Entrega oficial", desc: "Presentamos en la Seguridad Social y te enviamos la referencia." },
-  { title: "Sin certificado", desc: "Solo necesitas rellenar el formulario online." },
+  { title: "Entrega oficial", desc: "Presentamos tu solicitud y te damos la referencia." },
+  { title: "Sin certificado", desc: "Solo necesitas completar el formulario online." },
+  { title: "Pago único 9,90 EUR", desc: "Todo incluido, sin suscripciones." },
 ];
 
 const steps = [
-  {
-    title: "Envía tu formulario",
-    desc: "Tardas menos de 5 minutos. Validamos DNI/NIE y domicilio al instante.",
-  },
-  {
-    title: "Pago y confirmación",
-    desc: "Capturamos el pago (9,90 EUR) con PayPal y te mandamos el número de pedido.",
-  },
-  {
-    title: "Presentación TSE",
-    desc: "Nuestro equipo gestiona la solicitud ante la Seguridad Social y te envía la referencia.",
-  },
-  {
-    title: "Recibe la tarjeta",
-    desc: "La TSE llega por correo ordinario a la dirección declarada en tu expediente.",
-  },
+  { title: "1. Formulario", desc: "Validamos tu DNI/NIE y domicilio en minutos." },
+  { title: "2. Pago y confirmación", desc: "Recibes número de pedido y soporte humano." },
+  { title: "3. Presentación oficial", desc: "Tramitamos la TSE en la Seguridad Social por ti." },
+  { title: "4. Referencia y entrega", desc: "Te enviamos la referencia; la tarjeta llega por correo." },
 ];
 
 const faqs = [
   {
-    q: "¿Cuánto tarda la Tarjeta Sanitaria Europea?",
-    a: "La presentación se realiza en menos de 24 h laborables. El envío de la tarjeta depende de la Seguridad Social (aprox. 7‑10 días).",
+    q: "¿Cuánto tarda la TSE?",
+    a: "La solicitud se presenta el mismo día laboral. La tarjeta la envía la Seguridad Social por correo en aprox. 7‑10 días.",
   },
   {
-    q: "¿Puedo pedirla sin certificado digital?",
-    a: "Sí. Nos autorizas a presentar en tu nombre marcando el mandato del formulario y adjuntando la firma en texto.",
+    q: "¿Necesito certificado digital?",
+    a: "No. Durante el formulario nos autorizas y firmas con tu nombre completo.",
   },
   {
-    q: "¿Qué pasa si la Seguridad Social rechaza la solicitud?",
-    a: "Te avisamos por correo, corregimos la incidencia y, si no es posible presentarla, te devolvemos el 100% del pago.",
+    q: "¿Qué ocurre si falta información?",
+    a: "Te contactamos para corregirla. Si no podemos presentar el expediente, devolvemos el 100 % del pago.",
   },
   {
-    q: "¿Es seguro pagar con PayPal?",
-    a: "Sí. Usamos PayPal Business con captura directa y notificaciones automáticas. No almacenamos datos de tu tarjeta.",
+    q: "¿Es seguro el pago?",
+    a: "Pago 100 % seguro a través de plataformas reconocidas. Solo se captura cuando el formulario es válido.",
   },
 ];
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-slate-50 pb-16">
-      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-500 to-sky-500">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.3),_transparent_55%)]" />
-        <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-6 py-20 text-center text-white sm:px-10">
-          <p className="text-xs uppercase tracking-[0.5em] text-indigo-100">Tramites YA</p>
-          <h1 className="text-4xl font-bold leading-tight sm:text-5xl">
-            Tarjeta Sanitaria Europea sin certificado ni desplazamientos
-          </h1>
-          <p className="mx-auto max-w-3xl text-base text-slate-100 sm:text-lg">
-            Rellena un único formulario, paga 9,90 EUR de gestión y nosotros presentamos la TSE en la Seguridad Social.
-            Recibirás el número de referencia oficial y la tarjeta llegará por correo postal.
+    <main className="min-h-screen bg-slate-50 text-slate-900">
+      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-700 via-indigo-600 to-sky-600 text-white">
+        <div className="absolute inset-0 opacity-30 mix-blend-soft-light">
+          <div className="absolute inset-y-0 left-1/2 w-1/2 rounded-full bg-white blur-[120px]" />
+        </div>
+        <div className="relative mx-auto flex max-w-5xl flex-col gap-6 px-6 py-20 text-center sm:px-10">
+          <p className="text-xs uppercase tracking-[0.45em] text-indigo-100">Tramites YA</p>
+          <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">Tarjeta Sanitaria Europea sin desplazarte</h1>
+          <p className="mx-auto max-w-3xl text-base text-indigo-100 sm:text-lg">
+            Gestión completa por 9,90 EUR. Validamos tus datos, presentamos la solicitud en la Seguridad Social y te
+            entregamos la referencia oficial con soporte humano durante todo el proceso.
           </p>
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/tse"
-              className="rounded-xl bg-white px-6 py-3 text-base font-semibold text-indigo-600 shadow-lg shadow-indigo-900/20 transition hover:-translate-y-0.5"
+              className="rounded-2xl bg-white px-6 py-3 text-base font-semibold text-indigo-700 shadow-lg shadow-indigo-900/25 transition hover:-translate-y-0.5"
             >
               Solicitar TSE ahora
             </Link>
             <Link
               href="#faq"
-              className="rounded-xl border border-white/60 px-6 py-3 text-base font-semibold text-white transition hover:bg-white/10"
+              className="rounded-2xl border border-white/40 px-6 py-3 text-base font-semibold text-white transition hover:bg-white/10"
             >
-              Preguntas frecuentes
+              Ver preguntas frecuentes
             </Link>
           </div>
-          <div className="grid gap-4 rounded-2xl bg-white/10 p-6 backdrop-blur md:grid-cols-3">
-            {highlights.map((item) => (
-              <div key={item.title} className="rounded-xl bg-white/5 p-4 text-left">
-                <p className="text-sm font-semibold text-white">{item.title}</p>
-                <p className="mt-2 text-sm text-indigo-100">{item.desc}</p>
-              </div>
-            ))}
-          </div>
+          <TrustBadge />
         </div>
       </section>
 
-      <section className="mx-auto mt-16 max-w-5xl px-6 sm:px-10">
+      <section className="mx-auto max-w-6xl px-6 py-14 sm:px-10">
+        <div className="grid gap-6 lg:grid-cols-3">
+          {highlights.map((item) => (
+            <article
+              key={item.title}
+              className="rounded-3xl bg-white/80 p-6 shadow-lg shadow-slate-900/5 ring-1 ring-slate-100 transition hover:-translate-y-1 hover:shadow-xl"
+            >
+              <p className="text-sm font-semibold text-indigo-600">{item.title}</p>
+              <p className="mt-2 text-sm text-slate-600">{item.desc}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-6 pb-14 sm:px-10">
         <div className="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-slate-100">
-          <p className="text-sm font-medium text-indigo-600">Cómo actuamos</p>
-          <h2 className="mt-2 text-3xl font-bold text-slate-900">Proceso completo gestionado por especialistas</h2>
-          <p className="mt-3 text-base text-slate-600">
-            Nos especializamos exclusivamente en la Tarjeta Sanitaria Europea sin beneficiarios. Validamos la
-            información, presentamos por ti y hacemos seguimiento hasta que tengas número de referencia.
-          </p>
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
-            {steps.map((step, index) => (
-              <div
+          <header className="mb-8">
+            <p className="text-sm font-medium text-indigo-600">Proceso</p>
+            <h2 className="mt-1 text-3xl font-semibold">Acompañamiento claro en cuatro pasos</h2>
+            <p className="mt-2 text-sm text-slate-600">Sin trámites duplicados ni formularios adicionales.</p>
+          </header>
+          <div className="grid gap-5 md:grid-cols-2">
+            {steps.map((step) => (
+              <article
                 key={step.title}
-                className="flex gap-4 rounded-2xl border border-slate-100 p-5 shadow-sm hover:border-indigo-100"
+                className="rounded-2xl border border-slate-100/80 p-5 shadow-sm transition hover:-translate-y-1 hover:border-indigo-100 hover:shadow-lg"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-lg font-semibold text-indigo-600">
-                  {index + 1}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-slate-900">{step.title}</h3>
-                  <p className="text-sm text-slate-600">{step.desc}</p>
-                </div>
-              </div>
+                <h3 className="text-base font-semibold">{step.title}</h3>
+                <p className="mt-2 text-sm text-slate-600">{step.desc}</p>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="mx-auto mt-16 max-w-6xl px-6 sm:px-10">
+      <section className="mx-auto max-w-6xl px-6 pb-14 sm:px-10">
         <div className="grid gap-8 lg:grid-cols-2">
-          <div className="rounded-3xl bg-white p-8 shadow-lg ring-1 ring-slate-100">
-            <p className="text-sm font-semibold text-indigo-600">Garantía total</p>
-            <h3 className="mt-2 text-2xl font-bold text-slate-900">Si no presentamos tu solicitud, reembolso 100%</h3>
-            <p className="mt-3 text-sm text-slate-600">
-              Trabajamos con un equipo dedicado a la TSE. Revisamos cada expediente manualmente antes de presentar,
-              resolvemos incidencias por email/WhatsApp y te enviamos la referencia oficial de la Seguridad Social.
-            </p>
-            <ul className="mt-6 space-y-3 text-sm text-slate-700">
-              <li className="flex items-start gap-2">
+          <article className="rounded-3xl bg-white p-8 shadow-lg ring-1 ring-slate-100">
+            <p className="text-sm font-medium text-indigo-600">Confianza</p>
+            <h2 className="mt-2 text-2xl font-semibold">Reembolso total si no presentamos la TSE</h2>
+            <ul className="mt-6 space-y-3 text-sm text-slate-600">
+              <li className="flex gap-3">
                 <span className="mt-1 h-2 w-2 rounded-full bg-indigo-500" />
-                Acceso a tu número de pedido y actualizaciones por correo.
+                Seguimiento por email o WhatsApp hasta confirmar la referencia oficial.
               </li>
-              <li className="flex items-start gap-2">
+              <li className="flex gap-3">
                 <span className="mt-1 h-2 w-2 rounded-full bg-indigo-500" />
-                Referencia de la Sede Electrónica tras la presentación.
+                Cifrado AES-256-GCM para DNI/NIE y NAF antes de almacenarlos.
               </li>
-              <li className="flex items-start gap-2">
+              <li className="flex gap-3">
                 <span className="mt-1 h-2 w-2 rounded-full bg-indigo-500" />
-                Atención humana (sin chatbots) de lunes a sábado.
+                Equipo especializado exclusivamente en Tarjeta Sanitaria Europea.
               </li>
             </ul>
             <Link
               href="/tse"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-500"
+              className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-500"
             >
-              Comenzar solicitud
+              Iniciar solicitud
               <span aria-hidden="true">→</span>
             </Link>
-          </div>
+          </article>
 
-          <div className="rounded-3xl bg-gradient-to-br from-indigo-600 to-sky-500 p-8 text-white shadow-xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.4em] text-white/70">Beneficios</p>
-            <h3 className="mt-3 text-2xl font-bold">Todo lo que incluye la gestión TSE</h3>
-            <ul className="mt-6 space-y-4 text-sm">
-              <li className="flex items-start gap-3">
-                <span className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-xs">
-                  1
+          <article className="rounded-3xl bg-gradient-to-br from-indigo-700 to-slate-900 p-8 text-white shadow-xl">
+            <p className="text-sm font-medium uppercase tracking-[0.4em] text-white/70">Incluye</p>
+            <h2 className="mt-2 text-2xl font-semibold">Gestión integral de la TSE</h2>
+            <ul className="mt-6 space-y-4 text-sm text-indigo-50">
+              <li className="flex gap-3">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-xs font-semibold">
+                  01
                 </span>
-                Validación del titular, domicilio y teléfono según las reglas de la Seguridad Social.
+                Revisión documental y contacto inmediato si falta información.
               </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-xs">
-                  2
+              <li className="flex gap-3">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-xs font-semibold">
+                  02
                 </span>
-                Cifrado de DNI/NIE y NAF (AES-256-GCM) antes de guardarlos en la base de datos.
+                Presentación telemática en la Sede Electrónica de la Seguridad Social.
               </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-xs">
-                  3
+              <li className="flex gap-3">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-xs font-semibold">
+                  03
                 </span>
-                Seguimiento del expediente y comunicación si la Seguridad Social requiere información adicional.
+                Entrega de la referencia y guía para consultar el envío de la tarjeta.
               </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-xs">
-                  4
+              <li className="flex gap-3">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-xs font-semibold">
+                  04
                 </span>
-                Reembolso total si no podemos presentar tu solicitud o si decides cancelarla antes de la presentación.
+                Reembolso del 100 % si la solicitud no puede presentarse.
               </li>
             </ul>
-          </div>
+          </article>
         </div>
       </section>
 
-      <section id="faq" className="mx-auto mt-20 max-w-5xl px-6 sm:px-10">
+      <section id="faq" className="mx-auto max-w-5xl px-6 pb-14 sm:px-10">
         <div className="rounded-3xl bg-white p-8 shadow-lg ring-1 ring-slate-100">
-          <p className="text-sm font-semibold text-indigo-600">FAQ TSE</p>
-          <h3 className="mt-2 text-3xl font-bold text-slate-900">Preguntas frecuentes</h3>
-          <div className="mt-8 space-y-6">
+          <p className="text-sm font-medium text-indigo-600">Preguntas frecuentes</p>
+          <h2 className="mt-2 text-3xl font-semibold">Resolvemos tus dudas antes de pagar</h2>
+          <div className="mt-8 space-y-5">
             {faqs.map((item) => (
-              <div key={item.q} className="rounded-2xl border border-slate-100 p-5">
+              <article key={item.q} className="rounded-2xl border border-slate-100/80 p-5">
                 <p className="text-base font-semibold text-slate-900">{item.q}</p>
                 <p className="mt-2 text-sm text-slate-600">{item.a}</p>
-              </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="mx-auto mt-16 max-w-4xl px-6 text-center sm:px-10">
-        <div className="rounded-3xl bg-indigo-600 px-8 py-10 text-white shadow-xl">
+      <section className="mx-auto max-w-4xl px-6 pb-16 text-center sm:px-10">
+        <div className="rounded-3xl bg-indigo-700 px-8 py-10 text-white shadow-xl">
           <p className="text-sm uppercase tracking-[0.4em] text-white/70">Último paso</p>
-          <h3 className="mt-3 text-3xl font-bold">Tu Tarjeta Sanitaria Europea empieza aquí</h3>
+          <h2 className="mt-3 text-3xl font-semibold">Tu TSE por 9,90 EUR, sin sorpresas</h2>
           <p className="mt-3 text-sm text-indigo-100">
-            Coste único de 9,90 EUR. Sin permanencia, sin suscripciones y con soporte directo para cualquier duda.
+            Atención humana, referencia oficial y acompañamiento hasta recibir la tarjeta.
           </p>
           <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/tse"
-              className="rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-indigo-600 shadow-lg shadow-black/20 transition hover:-translate-y-0.5"
+              className="rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-indigo-700 shadow-lg shadow-black/20 transition hover:-translate-y-0.5"
             >
               Rellenar formulario
             </Link>
             <a
               href="mailto:hola@tramitesyaweb.com"
-              className="rounded-2xl border border-white/70 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="rounded-2xl border border-white/60 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
-              Escribir al soporte
+              Escribir a soporte
             </a>
           </div>
         </div>
       </section>
+
+      <HomeFooter />
     </main>
+  );
+}
+
+function TrustBadge() {
+  return (
+    <div className="flex items-center justify-center gap-2 text-sm font-medium text-indigo-100">
+      <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M8 11V7a4 4 0 0 1 8 0v4m-9 0h10a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Z"
+        />
+      </svg>
+      Pago 100 % seguro · a través de plataformas de pago reconocidas
+    </div>
+  );
+}
+
+function HomeFooter() {
+  const year = new Date().getFullYear();
+  const links = [
+    { label: "Política de privacidad", href: "/legal/privacidad" },
+    { label: "Aviso legal", href: "/legal/aviso-legal" },
+    { label: "Términos y condiciones", href: "/legal/terminos" },
+    { label: "Política de cookies", href: "/legal/cookies" },
+  ];
+
+  return (
+    <footer className="border-t border-slate-200 bg-white/90">
+      <div className="mx-auto flex max-w-5xl flex-col gap-3 px-6 py-8 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+        <p>© TramitesYA, {year}</p>
+        <nav className="flex flex-wrap gap-4">
+          {links.map((link) => (
+            <Link key={link.href} href={link.href} className="text-slate-500 transition hover:text-indigo-600">
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </footer>
   );
 }
