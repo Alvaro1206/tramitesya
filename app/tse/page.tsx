@@ -30,6 +30,7 @@ export default function TSEPage() {
   const [showPayPal, setShowPayPal] = useState(false);
   const payRef = useRef<HTMLDivElement>(null);
   const paypalActionsRef = useRef<any>(null);
+  const paypalButtonsRef = useRef<any>(null);
   const lastValidValuesRef = useRef<FormValues | null>(null);
 
   const {
@@ -102,88 +103,88 @@ export default function TSEPage() {
 
   const onCheckForm = useCallback(async () => {
     const valid = await runValidation();
-    if (valid) {
-      setShowPayPal(true);
-      setPaymentError(null);
-      requestAnimationFrame(() => {
-        payRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      });
-    }
+    if (!valid) return;
+    setShowPayPal(true);
+    setPaymentError(null);
+    requestAnimationFrame(() => {
+      payRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      paypalButtonsRef.current?.click?.();
+    });
   }, [runValidation]);
 
   useEffect(() => {
-    if (!showPayPal || !paypalReady || !payRef.current || !window.paypal) return;
+    if (!paypalReady || !payRef.current || !window.paypal) return;
     payRef.current.innerHTML = "";
 
-    const buttons = window.paypal
-      .Buttons({
-        onInit: (_: unknown, actions: any) => {
-          paypalActionsRef.current = actions;
-          actions.disable();
-        },
-        onClick: async (_: unknown, actions: any) => {
-          const validValues = await runValidation();
-          if (!validValues) {
-            return actions.reject();
-          }
-          return actions.resolve();
-        },
-        createOrder: (_: unknown, actions: any) =>
-          actions.order.create({
-            purchase_units: [
-              {
-                description: "Gestion solicitud TSE (0 EUR oficial)",
-                amount: { value: PRICE.toFixed(2), currency_code: "EUR" },
+    const buttons = window.paypal.Buttons({
+      onInit: (_: unknown, actions: any) => {
+        paypalActionsRef.current = actions;
+        actions.disable();
+      },
+      onClick: async (_: unknown, actions: any) => {
+        const validValues = await runValidation();
+        if (!validValues) {
+          return actions.reject();
+        }
+        return actions.resolve();
+      },
+      createOrder: (_: unknown, actions: any) =>
+        actions.order.create({
+          purchase_units: [
+            {
+              description: "Gestion solicitud TSE (0 EUR oficial)",
+              amount: { value: PRICE.toFixed(2), currency_code: "EUR" },
+            },
+          ],
+        }),
+      onApprove: async (_: unknown, actions: any) => {
+        try {
+          setPaymentError(null);
+          const details = await actions.order.capture();
+          const formValues = lastValidValuesRef.current ?? getValues();
+          const payload = buildPayload(formValues);
+          const response = await fetch("/api/tse/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              form: payload,
+              paypal: {
+                orderID: details.id,
+                captureID:
+                  details.purchase_units?.[0]?.payments?.captures?.[0]?.id ??
+                  details.id ??
+                  null,
+                payer: details.payer,
               },
-            ],
-          }),
-        onApprove: async (_: unknown, actions: any) => {
-          try {
-            setPaymentError(null);
-            const details = await actions.order.capture();
-            const formValues = lastValidValuesRef.current ?? getValues();
-            const payload = buildPayload(formValues);
-            const response = await fetch("/api/tse/submit", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                form: payload,
-                paypal: {
-                  orderID: details.id,
-                  captureID:
-                    details.purchase_units?.[0]?.payments?.captures?.[0]?.id ??
-                    details.id ??
-                    null,
-                  payer: details.payer,
-                },
-              }),
-            });
+            }),
+          });
 
-            if (!response.ok) {
-              setPaymentError(
-                "Pago correcto, pero no pudimos registrar tu solicitud. Contacta con soporte.",
-              );
-              return;
-            }
-
-            const body = await response.json();
-            window.location.href = `/gracias?order=${encodeURIComponent(body.orderId)}`;
-          } catch (error) {
-            console.error(error);
-            setPaymentError("No se pudo completar el proceso con PayPal. Intentalo de nuevo.");
+          if (!response.ok) {
+            setPaymentError("Pago correcto, pero no pudimos registrar tu solicitud. Contacta con soporte.");
+            return;
           }
-        },
-        onError: () => {
-          setPaymentError("No se pudo cargar PayPal. Recarga la pagina e intentalo de nuevo.");
-        },
-      })
-      .render(payRef.current);
+
+          const body = await response.json();
+          window.location.href = `/gracias?order=${encodeURIComponent(body.orderId)}`;
+        } catch (error) {
+          console.error(error);
+          setPaymentError("No se pudo completar el proceso con PayPal. Intentalo de nuevo.");
+        }
+      },
+      onError: () => {
+        setPaymentError("No se pudo cargar PayPal. Recarga la pagina e intentalo de nuevo.");
+      },
+    });
+
+    paypalButtonsRef.current = buttons;
+    buttons.render(payRef.current);
 
     return () => {
-      buttons?.close();
+      buttons.close();
       paypalActionsRef.current = null;
+      paypalButtonsRef.current = null;
     };
-  }, [paypalReady, showPayPal, getValues, runValidation]);
+  }, [paypalReady, getValues, runValidation]);
 
   useEffect(() => {
     if (!paypalActionsRef.current) return;
@@ -557,10 +558,13 @@ export default function TSEPage() {
           {paymentError && <p className="text-sm text-red-600">{paymentError}</p>}
           {!showPayPal && (
             <div className="rounded-2xl border border-dashed border-slate-300 p-4 text-sm text-slate-500">
-              Completa el formulario y pulsa “Solicitar TSE” para mostrar el botón de pago.
+              Completa el formulario y pulsa “Solicitar TSE” para iniciar el pago seguro.
             </div>
           )}
-          <div ref={payRef} className={showPayPal ? "mt-2" : "mt-2"} />
+          <div
+            ref={payRef}
+            className={`mt-2 transition ${showPayPal ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+          />
         </div>
       </form>
     </main>
