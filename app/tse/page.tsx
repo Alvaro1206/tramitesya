@@ -108,12 +108,23 @@ export default function TSEPage() {
     setPaymentError(null);
     requestAnimationFrame(() => {
       payRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      paypalButtonsRef.current?.click?.();
+      tryTriggerPayPalClick();
     });
   }, [runValidation]);
 
+  const tryTriggerPayPalClick = useCallback(() => {
+    const container = payRef.current;
+    if (!container) return;
+    const clickable =
+      container.querySelector<HTMLButtonElement>("div[data-funding-source='paypal'] button") ??
+      container.querySelector<HTMLDivElement>("div[data-funding-source='paypal']");
+    if (clickable) {
+      clickable.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window }));
+    }
+  }, []);
+
   useEffect(() => {
-    if (!paypalReady || !payRef.current || !window.paypal) return;
+    if (!showPayPal || !paypalReady || !payRef.current || !window.paypal) return;
     payRef.current.innerHTML = "";
 
     const buttons = window.paypal.Buttons({
@@ -177,14 +188,29 @@ export default function TSEPage() {
     });
 
     paypalButtonsRef.current = buttons;
-    buttons.render(payRef.current);
+    buttons.render(payRef.current).then(() => {
+      if (showPayPal) {
+        setTimeout(() => {
+          tryTriggerPayPalClick();
+        }, 50);
+      }
+    });
 
     return () => {
       buttons.close();
       paypalActionsRef.current = null;
       paypalButtonsRef.current = null;
     };
-  }, [paypalReady, getValues, runValidation]);
+  }, [paypalReady, showPayPal, getValues, runValidation]);
+
+  useEffect(() => {
+    if (showPayPal && paypalReady) {
+      const timeout = setTimeout(() => {
+        tryTriggerPayPalClick();
+      }, 150);
+      return () => clearTimeout(timeout);
+    }
+  }, [showPayPal, paypalReady, tryTriggerPayPalClick]);
 
   useEffect(() => {
     if (!paypalActionsRef.current) return;
