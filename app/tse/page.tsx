@@ -30,7 +30,6 @@ export default function TSEPage() {
   const [showPayPal, setShowPayPal] = useState(false);
   const payRef = useRef<HTMLDivElement>(null);
   const paypalActionsRef = useRef<any>(null);
-  const paypalButtonsRef = useRef<any>(null);
   const lastValidValuesRef = useRef<FormValues | null>(null);
 
   const {
@@ -108,26 +107,23 @@ export default function TSEPage() {
     setPaymentError(null);
     requestAnimationFrame(() => {
       payRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      tryTriggerPayPalClick();
     });
   }, [runValidation]);
-
-  const tryTriggerPayPalClick = useCallback(() => {
-    const container = payRef.current;
-    if (!container) return;
-    const clickable =
-      container.querySelector<HTMLButtonElement>("div[data-funding-source='paypal'] button") ??
-      container.querySelector<HTMLDivElement>("div[data-funding-source='paypal']");
-    if (clickable) {
-      clickable.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window }));
-    }
-  }, []);
 
   useEffect(() => {
     if (!showPayPal || !paypalReady || !payRef.current || !window.paypal) return;
     payRef.current.innerHTML = "";
 
     const buttons = window.paypal.Buttons({
+      fundingSource: window.paypal.FUNDING.PAYPAL,
+      style: {
+        layout: "horizontal",
+        color: "blue",
+        shape: "pill",
+        label: "pay",
+        height: 45,
+        tagline: false,
+      },
       onInit: (_: unknown, actions: any) => {
         paypalActionsRef.current = actions;
         actions.disable();
@@ -187,30 +183,13 @@ export default function TSEPage() {
       },
     });
 
-    paypalButtonsRef.current = buttons;
-    buttons.render(payRef.current).then(() => {
-      if (showPayPal) {
-        setTimeout(() => {
-          tryTriggerPayPalClick();
-        }, 50);
-      }
-    });
+    buttons.render(payRef.current);
 
     return () => {
       buttons.close();
       paypalActionsRef.current = null;
-      paypalButtonsRef.current = null;
     };
   }, [paypalReady, showPayPal, getValues, runValidation]);
-
-  useEffect(() => {
-    if (showPayPal && paypalReady) {
-      const timeout = setTimeout(() => {
-        tryTriggerPayPalClick();
-      }, 150);
-      return () => clearTimeout(timeout);
-    }
-  }, [showPayPal, paypalReady, tryTriggerPayPalClick]);
 
   useEffect(() => {
     if (!paypalActionsRef.current) return;
