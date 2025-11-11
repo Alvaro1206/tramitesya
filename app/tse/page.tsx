@@ -27,6 +27,7 @@ export default function TSEPage() {
   const [globalError, setGlobalError] = useState<string | null>(null);
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [paypalReady, setPaypalReady] = useState(false);
+  const [showPayPal, setShowPayPal] = useState(false);
   const payRef = useRef<HTMLDivElement>(null);
   const paypalActionsRef = useRef<any>(null);
   const lastValidValuesRef = useRef<FormValues | null>(null);
@@ -100,11 +101,18 @@ export default function TSEPage() {
   }, [handleSubmit, setFocus]);
 
   const onCheckForm = useCallback(async () => {
-    await runValidation();
+    const valid = await runValidation();
+    if (valid) {
+      setShowPayPal(true);
+      setPaymentError(null);
+      requestAnimationFrame(() => {
+        payRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    }
   }, [runValidation]);
 
   useEffect(() => {
-    if (!paypalReady || !payRef.current || !window.paypal) return;
+    if (!showPayPal || !paypalReady || !payRef.current || !window.paypal) return;
     payRef.current.innerHTML = "";
 
     const buttons = window.paypal
@@ -175,7 +183,7 @@ export default function TSEPage() {
       buttons?.close();
       paypalActionsRef.current = null;
     };
-  }, [paypalReady, getValues, runValidation]);
+  }, [paypalReady, showPayPal, getValues, runValidation]);
 
   useEffect(() => {
     if (!paypalActionsRef.current) return;
@@ -547,7 +555,12 @@ export default function TSEPage() {
             Solicitar TSE
           </button>
           {paymentError && <p className="text-sm text-red-600">{paymentError}</p>}
-          <div ref={payRef} className="mt-2" />
+          {!showPayPal && (
+            <div className="rounded-2xl border border-dashed border-slate-300 p-4 text-sm text-slate-500">
+              Completa el formulario y pulsa “Solicitar TSE” para mostrar el botón de pago.
+            </div>
+          )}
+          <div ref={payRef} className={showPayPal ? "mt-2" : "mt-2"} />
         </div>
       </form>
     </main>
