@@ -81,8 +81,9 @@ export default function TSEPage() {
 
   const canSubmit = useMemo(() => {
     const hasDomicilioChoice = watchDomCoincide || watchOtraDireccion;
-    return formState.isValid && hasDomicilioChoice && watchMandato && watchPrivacidad;
-  }, [formState.isValid, watchDomCoincide, watchMandato, watchOtraDireccion, watchPrivacidad]);
+    const hasConsents = watchMandato && watchPrivacidad;
+    return hasDomicilioChoice && hasConsents;
+  }, [watchDomCoincide, watchMandato, watchOtraDireccion, watchPrivacidad]);
 
   const runValidation = useCallback(async () => {
     let validData: FormValues | null = null;
