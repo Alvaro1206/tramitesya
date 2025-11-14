@@ -136,33 +136,35 @@ export default function TSEPage() {
         }
         return actions.resolve();
       },
-      createOrder: (_: unknown, actions: any) =>
-        actions.order.create({
-          purchase_units: [
-            {
-              description: "Gestion solicitud TSE (0 EUR oficial)",
-              amount: { value: PRICE.toFixed(2), currency_code: "EUR" },
-            },
-          ],
-        }),
-      onApprove: async (_: unknown, actions: any) => {
+      createOrder: async () => {
+        const res = await fetch("/api/paypal/create-order", { method: "POST" });
+        if (!res.ok) {
+          setPaymentError("No pudimos crear la orden en PayPal. Inténtalo más tarde.");
+          return null;
+        }
+        const data = await res.json();
+        return data.id;
+      },
+      onApprove: async ({ orderID }: { orderID: string }) => {
         try {
           setPaymentError(null);
-          const details = await actions.order.capture();
+          const captureResponse = await fetch(`/api/paypal/capture/${orderID}`, { method: "POST" });
+          if (!captureResponse.ok) {
+            setPaymentError("Pago autorizado pero no capturado. Contacta con soporte.");
+            return;
+          }
+          const capture = await captureResponse.json();
           const formValues = lastValidValuesRef.current ?? getValues();
           const payload = buildPayload(formValues);
+
           const response = await fetch("/api/tse/submit", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               form: payload,
               paypal: {
-                orderID: details.id,
-                captureID:
-                  details.purchase_units?.[0]?.payments?.captures?.[0]?.id ??
-                  details.id ??
-                  null,
-                payer: details.payer,
+                orderID: capture.orderId,
+                captureID: capture.captureId,
               },
             }),
           });
@@ -176,7 +178,7 @@ export default function TSEPage() {
           window.location.href = `/gracias?order=${encodeURIComponent(body.orderId)}`;
         } catch (error) {
           console.error(error);
-          setPaymentError("No se pudo completar el proceso con PayPal. Intentalo de nuevo.");
+          setPaymentError("No se pudo completar el proceso con PayPal. Inténtalo de nuevo.");
         }
       },
       onError: () => {
