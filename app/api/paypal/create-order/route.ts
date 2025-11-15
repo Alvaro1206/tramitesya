@@ -3,20 +3,21 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import { NextResponse } from "next/server";
-import { getPayPalAccessToken } from "@/lib/paypal";
+import { getPayPalAccessToken, getPayPalBase } from "@/lib/paypal";
 
 const PRICE = "9.90";
 const CURRENCY = "EUR";
 
 export async function POST() {
   try {
+    const base = getPayPalBase();
     const accessToken = await getPayPalAccessToken();
 
-    const response = await fetch(`${process.env.PAYPAL_API_BASE}/v2/checkout/orders`, {
+    const response = await fetch(`${base}/v2/checkout/orders`, {
       method: "POST",
       headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
         intent: "CAPTURE",
@@ -34,13 +35,13 @@ export async function POST() {
       }),
     });
 
+    const text = await response.text();
     if (!response.ok) {
-      const detail = await response.text();
-      console.error("PayPal create order failed", detail);
-      return NextResponse.json({ error: "create_failed", detail }, { status: 400 });
+      console.error("PayPal create order failed", text);
+      return NextResponse.json({ error: "create_failed", detail: text }, { status: 400 });
     }
 
-    const data = await response.json();
+    const data = JSON.parse(text);
     return NextResponse.json({ id: data.id });
   } catch (error) {
     console.error("Error creating PayPal order", error);
