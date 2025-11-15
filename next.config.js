@@ -1,25 +1,21 @@
 /** @type {import('next').NextConfig} */
 
-const PAYPAL_DOMAINS = [
-  "https://www.paypal.com",
-  "https://www.sandbox.paypal.com",
-  "https://*.paypal.com",
-  "https://*.paypalobjects.com",
-];
-
-const CSP = [
-  "default-src 'self'",
-  "base-uri 'self'",
-  `form-action 'self' ${PAYPAL_DOMAINS.slice(0, 2).join(" ")}`,
-  "frame-ancestors 'self'",
-  `frame-src 'self' ${PAYPAL_DOMAINS.join(" ")}`,
-  `connect-src 'self' https://api-m.paypal.com https://api-m.sandbox.paypal.com ${PAYPAL_DOMAINS.join(" ")}`,
-  `img-src 'self' data: blob: ${PAYPAL_DOMAINS.join(" ")}`,
-  `script-src 'self' 'unsafe-inline' ${PAYPAL_DOMAINS.join(" ")}`,
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "font-src 'self' data: https://fonts.gstatic.com",
-  "upgrade-insecure-requests",
-].join("; ");
+const CSP = `
+  default-src 'self';
+  base-uri 'self';
+  object-src 'none';
+  frame-ancestors 'self';
+  upgrade-insecure-requests;
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.paypal.com https://*.paypal.com https://*.paypalobjects.com;
+  connect-src 'self' https://api.sandbox.paypal.com https://api-m.paypal.com https://www.paypal.com https://*.paypal.com https://*.paypalobjects.com;
+  frame-src https://www.paypal.com https://*.paypal.com;
+  child-src https://www.paypal.com https://*.paypal.com;
+  img-src 'self' data: blob: https://*.paypal.com https://*.paypalobjects.com;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src 'self' https://fonts.gstatic.com data:;
+`
+  .replace(/\s{2,}/g, " ")
+  .trim();
 
 const securityHeaders = [
   { key: "Content-Security-Policy", value: CSP },
