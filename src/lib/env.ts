@@ -6,4 +6,5 @@ export const ENV = {
   PAYPAL_CLIENT_ID: process.env.PAYPAL_CLIENT_ID!,
   PAYPAL_SECRET: process.env.PAYPAL_SECRET!,
   PAYPAL_API_BASE: process.env.PAYPAL_API_BASE!,
+  PAYPAL_ENV: process.env.PAYPAL_ENV ?? (process.env.VERCEL_ENV === "production" ? "live" : "sandbox"),
 };
