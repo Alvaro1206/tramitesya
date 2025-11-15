@@ -137,23 +137,36 @@ export default function TSEPage() {
         return actions.resolve();
       },
       createOrder: async () => {
-        const res = await fetch("/api/paypal/create-order", { method: "POST" });
-        if (!res.ok) {
+        try {
+          const res = await fetch("/api/paypal/create-order", { method: "POST" });
+          if (!res.ok) {
+            const detail = await res.text();
+            throw new Error(`create-order ${res.status}: ${detail}`);
+          }
+          const data = await res.json();
+          if (!data?.id) {
+            throw new Error("create-order: missing id");
+          }
+          return data.id;
+        } catch (error) {
+          console.error("PayPal create-order error", error);
           setPaymentError("No pudimos crear la orden en PayPal. Inténtalo más tarde.");
-          return null;
+          throw error;
         }
-        const data = await res.json();
-        return data.id;
       },
       onApprove: async ({ orderID }: { orderID: string }) => {
         try {
           setPaymentError(null);
           const captureResponse = await fetch(`/api/paypal/capture/${orderID}`, { method: "POST" });
           if (!captureResponse.ok) {
-            setPaymentError("Pago autorizado pero no capturado. Contacta con soporte.");
-            return;
+            const detail = await captureResponse.text();
+            throw new Error(`capture ${captureResponse.status}: ${detail}`);
           }
           const capture = await captureResponse.json();
+          if (capture.status !== "COMPLETED") {
+            throw new Error(`capture status: ${capture.status}`);
+          }
+
           const formValues = lastValidValuesRef.current ?? getValues();
           const payload = buildPayload(formValues);
 
@@ -170,15 +183,16 @@ export default function TSEPage() {
           });
 
           if (!response.ok) {
-            setPaymentError("Pago correcto, pero no pudimos registrar tu solicitud. Contacta con soporte.");
-            return;
+            const detail = await response.text();
+            throw new Error(`submit ${response.status}: ${detail}`);
           }
 
           const body = await response.json();
           window.location.href = `/gracias?order=${encodeURIComponent(body.orderId)}`;
         } catch (error) {
-          console.error(error);
+          console.error("PayPal onApprove error", error);
           setPaymentError("No se pudo completar el proceso con PayPal. Inténtalo de nuevo.");
+          throw error;
         }
       },
       onError: () => {

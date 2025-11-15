@@ -24,6 +24,7 @@ export async function POST(_: Request, { params }: Params) {
 
     const data = await response.json();
     if (!response.ok || data.status !== "COMPLETED") {
+      console.error("PayPal capture failed", data);
       return NextResponse.json({ error: "capture_failed", detail: data }, { status: 400 });
     }
 

@@ -36,6 +36,7 @@ export async function POST() {
 
     if (!response.ok) {
       const detail = await response.text();
+      console.error("PayPal create order failed", detail);
       return NextResponse.json({ error: "create_failed", detail }, { status: 400 });
     }
 
