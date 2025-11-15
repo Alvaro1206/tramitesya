@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { CookieBanner } from "@/components/CookieBanner";
 
-const inter = Inter({ subsets: ["latin"] });
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+  preload: true,
+});
 
 export const metadata: Metadata = {
   title: "TramitesYA | Tarjeta Sanitaria Europea",
@@ -13,7 +18,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body className={`${inter.className} bg-slate-50 text-slate-900`}>
+      <body className={`${montserrat.className} bg-slate-50 text-slate-900`}>
         {children}
         <CookieBanner />
       </body>

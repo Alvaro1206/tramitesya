@@ -12,8 +12,8 @@ const ContentSecurityPolicy = `
   connect-src 'self' https://api-m.paypal.com https://*.paypal.com https://*.paypalobjects.com;
   frame-src https://www.paypal.com https://*.paypal.com;
   img-src 'self' data: blob: https://www.paypal.com https://*.paypal.com https://*.paypalobjects.com https://i.paypal.com;
-  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-  font-src 'self' data: https://fonts.gstatic.com;
+  style-src 'self' 'unsafe-inline';
+  font-src 'self' data:;
 `
   .replace(/\s{2,}/g, " ")
   .trim();
