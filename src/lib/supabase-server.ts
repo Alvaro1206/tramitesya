@@ -1,10 +1,20 @@
 import { createClient } from "@supabase/supabase-js";
 
-const SUPABASE_URL = process.env.SUPABASE_URL!;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env.POSTGRES_SUPABASE_URL;
+const supabaseServiceRoleKey = process.env.POSTGRES_SUPABASE_SERVICE_ROLE_KEY;
 
-export const supabaseServer = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-  auth: {
-    persistSession: false,
-  },
+if (!supabaseUrl) {
+  throw new Error(
+    "Env var POSTGRES_SUPABASE_URL no está definida. Pon aquí la Project URL de Supabase (https://xxxxx.supabase.co).",
+  );
+}
+
+if (!supabaseServiceRoleKey) {
+  throw new Error(
+    "Env var POSTGRES_SUPABASE_SERVICE_ROLE_KEY no está definida. Pon aquí la service_role key de Supabase.",
+  );
+}
+
+export const supabaseServer = createClient(supabaseUrl, supabaseServiceRoleKey, {
+  auth: { persistSession: false },
 });
