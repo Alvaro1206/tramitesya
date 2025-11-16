@@ -174,12 +174,19 @@ export default function TSEPage() {
           const formValues = lastValidValuesRef.current ?? getValues();
           const payload = buildPayload(formValues);
 
+          const normalizedCapture = {
+            status: capture.status,
+            orderId: capture.orderId ?? orderID,
+            captureId: capture.captureId,
+            raw: capture.raw ?? capture,
+          };
+
           const response = await fetch("/api/tse/submit", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               form: payload,
-              paypal: capture,
+              paypal: normalizedCapture,
             }),
           });
 
