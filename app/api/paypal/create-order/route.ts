@@ -1,4 +1,4 @@
-export const runtime = "nodejs";
+﻿export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -13,11 +13,12 @@ export async function POST() {
     const base = getPayPalBase();
     const accessToken = await getPayPalAccessToken();
 
-    const response = await fetch(`${base}/v2/checkout/orders`, {
+    const paypalRes = await fetch(`${base}/v2/checkout/orders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
+        Prefer: "return=representation",
       },
       body: JSON.stringify({
         intent: "CAPTURE",
@@ -29,20 +30,31 @@ export async function POST() {
             },
           },
         ],
-        application_context: {
-          shipping_preference: "NO_SHIPPING",
-        },
       }),
     });
 
-    const text = await response.text();
-    if (!response.ok) {
-      console.error("PayPal create order failed", text);
-      return NextResponse.json({ error: "create_failed", detail: text }, { status: 400 });
+    const data = await paypalRes.json().catch(() => null);
+
+    if (!paypalRes.ok || !data) {
+      console.error("PayPal create order failed", {
+        status: paypalRes.status,
+        body: data,
+      });
+      return NextResponse.json(
+        { error: "create_failed", detail: data ?? null },
+        { status: 400 }
+      );
     }
 
-    const data = JSON.parse(text);
-    return NextResponse.json({ id: data.id });
+    if (!data.id) {
+      console.error("PayPal create order missing id", data);
+      return NextResponse.json(
+        { error: "create_failed", detail: "missing id" },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json({ id: data.id, status: data.status });
   } catch (error) {
     console.error("Error creating PayPal order", error);
     return NextResponse.json({ error: "create_failed" }, { status: 500 });

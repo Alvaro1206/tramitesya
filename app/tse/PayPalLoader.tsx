@@ -41,7 +41,7 @@ export function PayPalLoader({ onReady }: Props) {
     script.src =
       `https://www.paypal.com/sdk/js?client-id=${clientId}` +
       `&currency=EUR` +
-      `&intent=capture` +
+      `&intent=CAPTURE` +
       `&components=buttons` +
       `&disable-funding=card,paylater`;
     script.async = true;

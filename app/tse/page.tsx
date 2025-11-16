@@ -29,7 +29,6 @@ export default function TSEPage() {
   const [paypalReady, setPaypalReady] = useState(false);
   const [showPayPal, setShowPayPal] = useState(false);
   const payRef = useRef<HTMLDivElement>(null);
-  const paypalActionsRef = useRef<any>(null);
   const lastValidValuesRef = useRef<FormValues | null>(null);
 
   const {
@@ -125,10 +124,6 @@ export default function TSEPage() {
         height: 45,
         tagline: false,
       },
-      onInit: (_: unknown, actions: any) => {
-        paypalActionsRef.current = actions;
-        actions.disable();
-      },
       onClick: async (_: unknown, actions: any) => {
         const validValues = await runValidation();
         if (!validValues) {
@@ -204,18 +199,8 @@ export default function TSEPage() {
 
     return () => {
       buttons.close();
-      paypalActionsRef.current = null;
     };
   }, [paypalReady, showPayPal, getValues, runValidation]);
-
-  useEffect(() => {
-    if (!paypalActionsRef.current) return;
-    if (canSubmit) {
-      paypalActionsRef.current.enable();
-    } else {
-      paypalActionsRef.current.disable();
-    }
-  }, [canSubmit]);
 
   useEffect(() => {
     if (canSubmit && globalError) {
