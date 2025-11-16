@@ -111,6 +111,11 @@ export default function TSEPage() {
     });
   }, [runValidation]);
 
+  const handlePayPalButton = useCallback(async () => {
+    if (isPaying) return;
+    await onCheckForm();
+  }, [isPaying, onCheckForm]);
+
   useEffect(() => {
     if (!showPayPal || !paypalReady || !payRef.current || !window.paypal) return;
     payRef.current.innerHTML = "";
@@ -573,16 +578,28 @@ export default function TSEPage() {
           <button
             type="button"
             onClick={onCheckForm}
-            disabled={!canSubmit}
+            disabled={!canSubmit || isPaying}
             className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-center text-base font-semibold text-white transition enabled:hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-slate-300"
-            aria-disabled={!canSubmit}
+            aria-disabled={!canSubmit || isPaying}
           >
             Solicitar TSE
           </button>
+          {!showPayPal && (
+            <button
+              type="button"
+              onClick={handlePayPalButton}
+              disabled={!canSubmit || !paypalReady || isPaying}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-3 text-base font-semibold text-blue-600 shadow-sm transition enabled:hover:bg-blue-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+              aria-disabled={!canSubmit || !paypalReady || isPaying}
+            >
+              <span className="text-sm uppercase tracking-wide text-blue-500">PayPal</span>
+              <span>{paypalReady ? "Pagar con PayPal" : "Cargando PayPal..."}</span>
+            </button>
+          )}
           {paymentError && <p className="text-sm text-red-600">{paymentError}</p>}
           {!showPayPal && (
             <div className="rounded-2xl border border-dashed border-slate-300 p-4 text-sm text-slate-500">
-              Completa el formulario y pulsa “Solicitar TSE” para iniciar el pago seguro.
+              Completa el formulario y pulsa "Pagar con PayPal" para iniciar el pago seguro.
             </div>
           )}
           <div
