@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseServer } from "@/lib/supabase-server";
+import { getSupabaseServerClient } from "@/lib/supabase-server";
 import type { FormPayload, AddressPayload } from "../../../tse/schema";
 
 const PRICE = 9.9;
@@ -95,7 +95,18 @@ export async function POST(req: NextRequest) {
     const domicilio = form.domicilio;
     const alt = form.otra_direccion_detalle ?? null;
 
-    const { data, error } = await supabaseServer
+    const supabase = getSupabaseServerClient();
+    if (!supabase) {
+      console.error(
+        "[TSE] Supabase no está configurado. Revisa POSTGRES_SUPABASE_URL y POSTGRES_SUPABASE_SERVICE_ROLE_KEY en Vercel.",
+      );
+      return NextResponse.json(
+        { ok: false, error: "supabase_not_configured" },
+        { status: 500 },
+      );
+    }
+
+    const { data, error } = await supabase
       .from("tse_requests")
       .insert({
         status: "paid",
