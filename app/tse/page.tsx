@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm, type UseFormRegisterReturn } from "react-hook-form";
@@ -28,6 +28,7 @@ export default function TSEPage() {
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [paypalReady, setPaypalReady] = useState(false);
   const [showPayPal, setShowPayPal] = useState(false);
+  const [isPaying, setIsPaying] = useState(false);
   const payRef = useRef<HTMLDivElement>(null);
   const lastValidValuesRef = useRef<FormValues | null>(null);
 
@@ -152,12 +153,20 @@ export default function TSEPage() {
       onApprove: async ({ orderID }: { orderID: string }) => {
         try {
           setPaymentError(null);
-          const captureResponse = await fetch(`/api/paypal/capture/${orderID}`, { method: "POST" });
+          setIsPaying(true);
+          console.log("[PayPal] onApprove, orderID =", orderID);
+
+          const captureResponse = await fetch(`/api/paypal/capture/${orderID}`, {
+            method: "POST",
+          });
           if (!captureResponse.ok) {
             const detail = await captureResponse.text();
+            console.error("[PayPal] capture error", captureResponse.status, detail);
             throw new Error(`capture ${captureResponse.status}: ${detail}`);
           }
+
           const capture = await captureResponse.json();
+          console.log("[PayPal] capture JSON", capture);
           if (capture.status !== "COMPLETED") {
             throw new Error(`capture status: ${capture.status}`);
           }
@@ -170,23 +179,24 @@ export default function TSEPage() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               form: payload,
-              paypal: {
-                orderID: capture.orderId,
-                captureID: capture.captureId,
-              },
+              paypal: capture,
             }),
           });
 
           if (!response.ok) {
             const detail = await response.text();
+            console.error("[TSE] submit error", response.status, detail);
             throw new Error(`submit ${response.status}: ${detail}`);
           }
 
           const body = await response.json();
-          window.location.href = `/gracias?order=${encodeURIComponent(body.orderId)}`;
+          console.log("[TSE] submit OK", body);
+          const finalOrderId = body.orderId ?? orderID;
+          window.location.href = `/gracias?order=${encodeURIComponent(finalOrderId)}`;
         } catch (error) {
-          console.error("PayPal onApprove error", error);
-          setPaymentError("No se pudo completar el proceso con PayPal. Inténtalo de nuevo.");
+          console.error("[PayPal] onApprove error", error);
+          setPaymentError("No se pudo completar el proceso con PayPal. Intentalo de nuevo.");
+          setIsPaying(false);
           throw error;
         }
       },
