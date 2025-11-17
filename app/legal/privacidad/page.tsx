@@ -1,156 +1,160 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidad | TramitesYA",
+  title: "Politica de Privacidad | TramitesYA",
   description:
-    "Información sobre cómo TramitesYA trata los datos necesarios para gestionar la Tarjeta Sanitaria Europea sin certificado.",
+    "Informacion sobre como TramitesYA trata los datos personales para gestionar la Tarjeta Sanitaria Europea y otros tramites.",
   robots: { index: true, follow: true },
 };
 
-export default function PrivacidadPage() {
-  const updatedAt = "11/11/2025";
+const UPDATED_AT = "16/11/2025";
+
+const OWNER = {
+  name: "Alvaro Esteve Rovira",
+  nif: "53873015T",
+  address: "Carrer de Pahissa 10, 08172 Sant Cugat del Valles, Barcelona, Espana",
+  email: "tramitesyaweb@gmail.com",
+  tradeName: "TramitesYA",
+  site: "https://tramitesyaweb.com",
+};
+
+export default function PoliticaPrivacidadPage() {
   return (
     <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
       <article className="prose prose-slate max-w-none prose-headings:scroll-mt-24">
         <header>
-          <h1>Política de Privacidad</h1>
+          <p className="text-xs uppercase tracking-wide text-slate-500">Proteccion de datos</p>
+          <h1>Politica de Privacidad</h1>
           <p className="mt-2 text-sm text-slate-600">
-            <strong>Última actualización:</strong> {updatedAt}
+            Ultima actualizacion: <strong>{UPDATED_AT}</strong>
           </p>
           <p className="text-sm text-slate-600">
-            <strong>Titular:</strong> TramitesYA (Tramitesyaweb.com) · <strong>Dominio:</strong> https://tramitesyaweb.com ·{" "}
-            <strong>Contacto:</strong> <a href="mailto:tramitesyaweb@gmail.com">tramitesyaweb@gmail.com</a>
+            Responsable: {OWNER.name} ({OWNER.tradeName}) &middot; NIF {OWNER.nif} &middot; {OWNER.address} &middot;{" "}
+            <a href={`mailto:${OWNER.email}`} className="text-indigo-600">
+              {OWNER.email}
+            </a>
           </p>
           <p>
-            Esta política explica cómo tratamos los datos necesarios para ofrecer el servicio de gestión de la Tarjeta Sanitaria Europea (TSE) sin
-            certificado digital.
+            El uso del sitio <a href={OWNER.site}>{OWNER.site}</a> implica la lectura y aceptacion de esta Politica de Privacidad. Si no estas de acuerdo,
+            no utilices el sitio ni contrates los servicios.
           </p>
         </header>
 
         <section>
-          <h2>1. Datos tratados</h2>
-          <h3>Datos que nos facilitas</h3>
-          <ul>
-            <li>Identificación: nombre, apellidos, tipo y número de documento (DNI/NIE/Pasaporte) y, opcionalmente, NAF.</li>
-            <li>Domicilio de envío y, si lo indicas, dirección alternativa.</li>
-            <li>Contacto: teléfono móvil español y correo electrónico.</li>
-            <li>Mandato/autorización y consentimientos marcados en el formulario.</li>
-            <li>Pago: solo recibimos de PayPal el ID y estado del pedido.</li>
-          </ul>
-          <h3>Datos obtenidos automáticamente</h3>
-          <ul>
-            <li>Datos técnicos (IP, navegador, idioma y logs de seguridad).</li>
-            <li>Cookies estrictamente necesarias; las opcionales requieren tu consentimiento. Consulta la <a href="/legal/cookies">Política de Cookies</a>.</li>
-          </ul>
+          <h2>1. Identidad del responsable</h2>
+          <p>{OWNER.name} actua como empresario individual bajo el nombre comercial TramitesYA y es el responsable del tratamiento de los datos recogidos a traves del sitio.</p>
         </section>
 
         <section>
-          <h2>2. Finalidades y bases legales</h2>
-          <div className="overflow-x-auto rounded-lg border border-slate-200">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-50">
-                <tr>
-                  <th className="px-4 py-2 text-left">Finalidad</th>
-                  <th className="px-4 py-2 text-left">Base legal</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-t">
-                  <td className="px-4 py-3">
-                    Gestionar tu solicitud TSE: validar datos, presentar ante la Seguridad Social y enviarte la referencia.
-                  </td>
-                  <td className="px-4 py-3">Ejecución del contrato (art. 6.1.b RGPD) y consentimiento para la representación.</td>
-                </tr>
-                <tr className="border-t">
-                  <td className="px-4 py-3">Atención al cliente, soporte y comunicaciones sobre tu expediente.</td>
-                  <td className="px-4 py-3">Ejecución del contrato / interés legítimo (art. 6.1.f).</td>
-                </tr>
-                <tr className="border-t">
-                  <td className="px-4 py-3">Cobro, facturación y prevención de fraude.</td>
-                  <td className="px-4 py-3">Ejecución del contrato / obligación legal / interés legítimo.</td>
-                </tr>
-                <tr className="border-t">
-                  <td className="px-4 py-3">Analítica esencial y marketing propio opcional.</td>
-                  <td className="px-4 py-3">Interés legítimo o consentimiento (art. 6.1.a).</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p className="mt-4">No adoptamos decisiones automatizadas con efectos jurídicos.</p>
-        </section>
-
-        <section>
-          <h2>3. Destinatarios</h2>
+          <h2>2. Datos personales tratados</h2>
+          <h3>Formulario de solicitud TSE</h3>
           <ul>
-            <li>Seguridad Social: para presentar la TSE con tu autorización.</li>
-            <li>PayPal (Europe) S.à r.l.: responsable independiente del cobro.</li>
-            <li>Vercel Inc. (hosting/serverless) y Neon Tech (PostgreSQL, UE/Frankfurt) como encargados.</li>
-            <li>Proveedores de correo/soporte y autoridades públicas cuando la ley lo requiera.</li>
+            <li>Datos identificativos: nombre, apellidos, documento de identidad, firma.</li>
+            <li>Contacto: telefono y correo electronico.</li>
+            <li>Seguridad Social y domicilio: NAF, direccion principal y alternativa.</li>
+            <li>Datos adicionales necesarios, incluida fecha de nacimiento o declaraciones sobre el domicilio.</li>
           </ul>
-          <p>Formalizamos acuerdos de encargo (DPA) y aplicamos Cláusulas Contractuales Tipo cuando proceden transferencias internacionales.</p>
+          <h3>Datos de navegacion</h3>
+          <p>Direccion IP, identificadores de dispositivo, agente del navegador, paginas visitadas y cookies segun la Politica de Cookies.</p>
+          <h3>Pagos y facturacion</h3>
+          <p>Importe, fecha, identificador de operacion, medio de pago y datos fiscales para emitir factura. TramitesYA no almacena datos completos de tarjeta; los gestiona la pasarela (por ejemplo, PayPal).</p>
         </section>
 
         <section>
-          <h2>4. Plazos de conservación</h2>
+          <h2>3. Finalidades y bases legales</h2>
+          <h3>Gestion de la solicitud TSE</h3>
+          <p>Recoger datos, presentar la solicitud ante la Seguridad Social, hacer seguimiento y comunicarse contigo. Base legal: ejecucion del contrato y cumplimiento de obligaciones legales.</p>
+          <h3>Pagos y facturacion</h3>
+          <p>Gestionar el cobro, control contable y fiscal, emision de facturas. Base legal: ejecucion del contrato y obligaciones legales.</p>
+          <h3>Atencion al usuario</h3>
+          <p>Responder dudas e incidencias por correo u otros canales. Base legal: medidas precontractuales, contrato e interes legitimo.</p>
+          <h3>Seguridad y prevencion de fraude</h3>
+          <p>Proteger el sitio, evitar usos abusivos y registrar evidencias minimas. Base legal: interes legitimo y, en su caso, obligaciones legales.</p>
+          <h3>Comunicaciones informativas o comerciales</h3>
+          <p>Enviar avisos del servicio o comunicaciones comerciales sobre servicios similares. Base legal: interes legitimo cuando existe relacion previa o consentimiento expreso. Puedes oponerte en cualquier momento escribiendo a {OWNER.email}.</p>
+        </section>
+
+        <section>
+          <h2>4. Plazos de conservacion</h2>
           <ul>
-            <li>Expedientes TSE: hasta 12 meses desde el cierre.</li>
-            <li>Mandatos y consentimientos: 3 años.</li>
-            <li>Facturación/contabilidad: 6 años (obligación legal).</li>
-            <li>Logs técnicos: hasta 12 meses.</li>
-            <li>Marketing opcional: hasta que retires el consentimiento.</li>
+            <li>Datos del servicio: mientras dure la gestion y, tras ello, bloqueados durante hasta 6 anos para responsabilidades legales.</li>
+            <li>Facturacion y contabilidad: 4 a 6 anos segun norma fiscal.</li>
+            <li>Comunicaciones comerciales: hasta que retires el consentimiento u/oposicion.</li>
+          </ul>
+          <p>Finalizados los plazos, los datos se eliminan de forma segura o se anonimizan.</p>
+        </section>
+
+        <section>
+          <h2>5. Destinatarios y encargados</h2>
+          <p>Los datos podran comunicarse a:</p>
+          <ul>
+            <li>Administraciones publicas (Seguridad Social, Agencia Tributaria) cuando sea necesario.</li>
+            <li>Pasarelas de pago como PayPal, que actuan como responsables respecto a los datos que recogen.</li>
+            <li>Proveedores tecnologicos (hosting en Vercel, base de datos en Supabase, correo, etc.) como encargados del tratamiento con contratos adecuados.</li>
           </ul>
         </section>
 
         <section>
-          <h2>5. Seguridad</h2>
-          <ul>
-            <li>Cifrado TLS en tránsito y cifrado en reposo.</li>
-            <li>Cifrado AES-256-GCM para DNI/NIE y NAF.</li>
-            <li>Control de accesos, 2FA, registros de actividad y entornos segregados.</li>
-            <li>Backups y planes de contingencia.</li>
-          </ul>
+          <h2>6. Transferencias internacionales</h2>
+          <p>Si un proveedor esta fuera del EEE solo se transferiran datos con garantias adecuadas (decision de adecuacion o clausulas contractuales tipo). Puedes solicitar detalle adicional escribiendo a {OWNER.email}.</p>
         </section>
 
         <section>
-          <h2>6. Derechos</h2>
+          <h2>7. Derechos de las personas usuarias</h2>
+          <p>Puedes ejercer acceso, rectificacion, supresion, oposicion, limitacion, portabilidad y retiro del consentimiento enviando una solicitud con copia de tu documento de identidad a {OWNER.email}. Tambien puedes reclamar ante la Agencia Espanola de Proteccion de Datos (www.aepd.es).</p>
+        </section>
+
+        <section>
+          <h2>8. Seguridad</h2>
+          <p>Se aplican medidas tecnicas y organizativas como HTTPS, control de accesos y revisiones periodicas. Ningun sistema es infalible, por lo que se recomienda cautela al utilizar el sitio.</p>
+        </section>
+
+        <section>
+          <h2>9. Veracidad y actualizacion de datos</h2>
+          <p>Eres responsable de que los datos aportados sean veraces, exactos y actualizados. Debes comunicar cualquier cambio y no facilitar datos de terceros sin autorizacion.</p>
+        </section>
+
+        <section>
+          <h2>10. Datos de terceros</h2>
+          <p>Si tramitas en nombre de otra persona, declaras contar con su autorizacion y haberla informado de esta Politica. Respondes de los danos derivados del incumplimiento de esta obligacion.</p>
+        </section>
+
+        <section>
+          <h2>11. Cookies y tecnologias similares</h2>
           <p>
-            Puedes ejercer acceso, rectificación, supresión, oposición, limitación, portabilidad y retirada de consentimientos escribiendo a{" "}
-            <a href="mailto:tramitesyaweb@gmail.com">tramitesyaweb@gmail.com</a>. Respondemos en un mes (ampliable a dos).
-          </p>
-          <p>
-            Si consideras que no hemos atendido correctamente tu solicitud, puedes reclamar ante la Agencia Española de Protección de Datos (
-            <a href="https://www.aepd.es" rel="noreferrer" target="_blank">
-              www.aepd.es
+            Utilizamos cookies tecnicas y, si lo aceptas, cookies de preferencias o analiticas. Encontraras toda la informacion y opciones de configuracion en la{" "}
+            <a href="https://tramitesyaweb.com/politica-cookies" className="text-indigo-600">
+              Politica de Cookies
             </a>
-            ).
+            .
           </p>
         </section>
 
         <section>
-          <h2>7. Obligaciones del usuario</h2>
-          <p>Debes proporcionar datos veraces y actualizados. Si aportas datos de terceros, garantizas legitimación y que los has informado.</p>
-          <p>El servicio se dirige a mayores de 18 años.</p>
+          <h2>12. Menores de edad</h2>
+          <p>La web no esta dirigida a menores de 18 anos. Si detectamos datos de menores sin autorizacion los eliminaremos a la mayor brevedad.</p>
         </section>
 
         <section>
-          <h2>8. Cookies</h2>
+          <h2>13. Cambios en la politica</h2>
+          <p>Podemos actualizar esta Politica para adaptarla a cambios legales o de servicio. Cuando el cambio sea relevante intentaremos avisarte por medios razonables. Consulta periodicamente esta pagina.</p>
+        </section>
+
+        <section>
+          <h2>14. Contacto</h2>
+          <p>Para cualquier consulta sobre privacidad escribe a {OWNER.email}. Atenderemos tu solicitud en el menor plazo posible.</p>
+        </section>
+
+        <footer className="border-t border-slate-200 pt-6 text-sm text-slate-500">
+          <p>Ultima actualizacion: {UPDATED_AT}</p>
           <p>
-            Usamos cookies técnicas imprescindibles. Las cookies de analítica o marketing solo se instalan si aceptas desde el banner de cookies. Puedes
-            modificar tu elección en cualquier momento.
+            &copy; {new Date().getFullYear()}{" "}
+            <a href={OWNER.site} className="text-indigo-600">
+              Tramitesyaweb.com
+            </a>
+            . Todos los derechos reservados.
           </p>
-        </section>
-
-        <section>
-          <h2>9. Cambios en la política</h2>
-          <p>Publicaremos cualquier actualización en esta página indicando la fecha de vigencia y, si procede, te avisaremos por medios razonables.</p>
-        </section>
-
-        <section>
-          <h2>10. Contacto</h2>
-          <p>
-            Para dudas de privacidad o ejercicio de derechos, escribe a <a href="mailto:tramitesyaweb@gmail.com">tramitesyaweb@gmail.com</a>.
-          </p>
-        </section>
+        </footer>
       </article>
     </main>
   );
