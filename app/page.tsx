@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 const highlights = [
   { title: "Entrega oficial", desc: "Presentamos tu solicitud y te damos la referencia." },
@@ -16,7 +16,7 @@ const steps = [
 const faqs = [
   {
     q: "¿Cuánto tarda la TSE?",
-    a: "La solicitud se presenta el mismo día laboral. La tarjeta la envía la Seguridad Social por correo en aprox. 7‑10 días.",
+    a: "La solicitud se presenta el mismo día laboral. La tarjeta la envía la Seguridad Social por correo en aprox. 7-10 días.",
   },
   {
     q: "¿Necesito certificado digital?",
@@ -123,7 +123,7 @@ export default function HomePage() {
               className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-500"
             >
               Iniciar solicitud
-              <span aria-hidden="true">→</span>
+              <span aria-hidden="true">?</span>
             </Link>
           </article>
 
@@ -222,16 +222,16 @@ function TrustBadge() {
 function HomeFooter() {
   const year = new Date().getFullYear();
   const links = [
-    { label: "Política de privacidad", href: "/legal/privacidad" },
+    { label: "Politica de privacidad", href: "/legal/privacidad" },
     { label: "Aviso legal", href: "/legal/aviso-legal" },
-    { label: "Términos y condiciones", href: "/legal/terminos" },
-    { label: "Política de cookies", href: "/legal/cookies" },
+    { label: "Terminos y condiciones", href: "/legal/terminos" },
+    { label: "Politica de cookies", href: "/legal/cookies" },
   ];
 
   return (
     <footer className="border-t border-slate-200 bg-white/90">
       <div className="mx-auto flex max-w-5xl flex-col gap-3 px-6 py-8 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-        <p>© TramitesYA, {year}</p>
+        <p>© Tramitesyaweb.com, {year}</p>
         <nav className="flex flex-wrap gap-4">
           {links.map((link) => (
             <Link key={link.href} href={link.href} className="text-slate-500 transition hover:text-indigo-600">
