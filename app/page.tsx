@@ -1,4 +1,5 @@
-﻿import Link from "next/link";
+﻿import Image from "next/image";
+import Link from "next/link";
 
 const highlights = [
   { title: "Entrega oficial", desc: "Presentamos tu solicitud y te damos la referencia." },
@@ -204,6 +205,33 @@ export default function HomePage() {
   );
 }
 
+function SiteHeader() {
+  return (
+    <header className="flex items-center justify-between rounded-2xl bg-white/10 px-4 py-3 backdrop-blur">
+      <div className="flex items-center gap-3">
+        <Image
+          src="/tramitesya-logo-yellow.png"
+          alt="TramitesYA – Tarjeta Sanitaria Europea online"
+          width={160}
+          height={160}
+          className="h-10 w-auto"
+          priority
+        />
+        <div className="text-left text-white">
+          <p className="text-xs uppercase tracking-wide text-indigo-100">Servicio privado</p>
+          <p className="text-lg font-semibold">TramitesYA</p>
+        </div>
+      </div>
+      <Link
+        href="/tse"
+        className="rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-indigo-700 shadow transition hover:bg-white"
+      >
+        Ir al formulario
+      </Link>
+    </header>
+  );
+}
+
 function TrustBadge() {
   return (
     <div className="flex items-center justify-center gap-2 text-sm font-medium text-indigo-100">
@@ -243,3 +271,5 @@ function HomeFooter() {
     </footer>
   );
 }
+
+
